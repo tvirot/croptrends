@@ -12,6 +12,10 @@ div {
   border: 1px solid #eee;
 }
 
+.hidden_elem {
+  display: none;
+}
+
 .navbar ul {
   list-style-type: none;
   margin: 0;
@@ -48,12 +52,12 @@ div {
 
 .search-box {
   border-radius: 12px;
-  border: 2px solid #999;
+  border: 2px solid #ccc;
   height: 24px;
   margin-bottom: 12px;
   overflow: hidden;
   text-align: left;
-  vertical-align: top;
+  vertical-align: baseline;
   white-space: nowrap;
 }
 
@@ -70,6 +74,58 @@ div {
   line-height: 16px;
   width: 90%;
   width: calc(100% - 50px);
+}
+
+.collaspible-menu .group {
+  border: 2px solid #ccc;
+  height: 36px;
+  padding-top: 4px;
+  vertical-align: baseline;
+}
+
+.collaspible-menu .group .title {
+  display: inline-block;
+  float: left;
+  line-height: 30px;
+  padding-left: 12px;
+  text-transform: uppercase;
+}
+
+.collaspible-menu .group .glyphicon {
+  display: inline-block;
+  float: right;
+  line-height: 30px;
+  padding-right: 12px;
+}
+
+.collaspible-menu .group .glyphicon.hidden_elem {
+  display: none;
+}
+
+.collaspible-menu .commodity {
+  font-size: 14px;
+  padding: 8px 0;
+  height: 200px;
+  overflow: scroll;
+  text-align: left;
+}
+
+.collaspible-menu .commodity ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  padding-left: 16px;
+}
+
+.collaspible-menu .commodity li {
+  cursor: pointer;
+  line-height: 24px;
+  text-transform: lowercase;
+}
+
+.collaspible-menu .commodity li:hover {
+  padding-left: 8px;
+  font-weight: bold;
 }
 
 .main {
