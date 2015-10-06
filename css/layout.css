@@ -46,8 +46,10 @@ div {
 
 .sidebar {
   display: inline-block;
+  margin-right: 24px;
   vertical-align: top;
-  width: 25%;
+  width: 22%;
+  width: calc(25% - 24px);
 }
 
 .search-box {
@@ -91,14 +93,23 @@ div {
   text-transform: uppercase;
 }
 
+.collaspible-menu.expanded .group .title {
+  font-weight: bold;
+}
+
 .collaspible-menu .group .glyphicon {
+  color: #666;
   display: inline-block;
   float: right;
   line-height: 30px;
   padding-right: 12px;
 }
 
-.collaspible-menu .group .glyphicon.hidden_elem {
+.collaspible-menu.collapsed .group .glyphicon-chevron-up {
+  display: none;
+}
+
+.collaspible-menu.expanded .group .glyphicon-chevron-down {
   display: none;
 }
 
@@ -108,6 +119,10 @@ div {
   height: 200px;
   overflow: scroll;
   text-align: left;
+}
+
+.collaspible-menu.collapsed .commodity {
+  display: none;
 }
 
 .collaspible-menu .commodity ul {
@@ -133,6 +148,52 @@ div {
   width: 74%;
 }
 
-.main .summary {
-  height: 40px;
+.main .header {}
+
+.main .header .summary {
+  display: inline-block;
+  float: left;
+  text-align: left;
+}
+
+#summary-key {
+  font-size: 18px;
+}
+
+#summary-value {
+  font-size: 24px;
+}
+
+.main .header .toggle {
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  display: inline-block;
+  float: right;
+  font-size: 14px;
+  margin: 0 16px;
+}
+
+.main .header .toggle ul {
+  list-style-type: none;
+  margin: 0;
+  margin-left: 20px;
+  padding: 0;
+}
+
+.main .header .toggle li {
+  display: inline-block;
+  margin-right: 20px;
+  padding: 8px 0;
+}
+
+.main .header .toggle li.selected {
+  font-weight: bold;
+}
+
+p.clear {
+  clear: both;
+}
+
+.main .viz {
+  height: 50px;
 }
