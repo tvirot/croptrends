@@ -1,0 +1,56 @@
+body {
+  background-color: #fefefe;
+  color: #444;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0 20px 0 20px;
+}
+
+/* For debugging layout */
+div {
+  border: 1px solid #eee;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display: inline-block;
+  margin-right: 20px;
+  padding: 8px 0;
+}
+
+.navbar li.selected {
+  border-bottom: 2px solid #444;
+  font-weight: bold;
+}
+
+.navbar a {
+  color: #444;
+  text-decoration: none;
+}
+
+.content {
+  text-align: center;
+  margin-top: 20px;
+  min-width: 1000px;
+}
+
+.sidebar {
+  display: inline-block;
+  vertical-align: top;
+  width: 25%;
+}
+
+.main {
+  display: inline-block;
+  width: 74%;
+}
+
+.main .summary {
+  height: 40px;
+}
