@@ -55,7 +55,9 @@ div {
   width: 268px;
   float: left;
   border: 1px solid #ccc;
-  background-color: #fff
+  border-bottom: 0;
+  background-color: #fff;
+  /*transition-duration: 1s;*/
 }
 
 .search-box {
@@ -84,6 +86,10 @@ div {
   width: calc(100% - 50px);
 }
 
+.collaspible-menu {
+  /*transition-duration: 1s;*/
+}
+
 .collaspible-menu .group {
   border-bottom: 1px solid #ccc;
   height: 52px;
@@ -92,7 +98,7 @@ div {
 }
 
 .collaspible-menu:last-child .group{
-  border-bottom: 0;
+  /*border-bottom: 0;*/
 }
 
 .collaspible-menu .group .title {
@@ -102,6 +108,10 @@ div {
   padding-left: 20px;
   text-transform: uppercase;
   font-size: 18px
+}
+
+.collaspible-menu.expanded .group {
+  cursor: default;
 }
 
 .collaspible-menu.expanded .group .title {
@@ -114,6 +124,10 @@ div {
   float: right;
   line-height: 52px;
   padding-right: 20px;
+}
+
+.collaspible-menu.collapsed .group {
+  cursor: pointer;
 }
 
 .collaspible-menu.collapsed .group .glyphicon-chevron-up {

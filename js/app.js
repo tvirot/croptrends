@@ -206,6 +206,28 @@
     d3.json(url, callback);
   }
 
+  function changeClass(params){
+    
+    if (params.classList.contains("expanded")) return;
+    
+    var x = document.querySelectorAll(".expanded");
+    var index;
+    for (index = 0; index < x.length; ++index) {
+      x[index].classList.remove("expanded");
+      x[index].classList.add("collapsed");
+    }
+
+    params.classList.remove("collapsed");
+    params.classList.add("expanded");
+  }
+
+  window.onload = function()
+  {
+    document.getElementById("crops").onclick = function() {changeClass(this)};
+    document.getElementById("fruitTreeNuts").onclick = function() {changeClass(this)};
+    document.getElementById("vegetables").onclick = function() {changeClass(this)};
+  }
+
   init();
   updateData();
 
