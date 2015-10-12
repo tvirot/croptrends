@@ -9,6 +9,8 @@ page.zoomFactor = 2;
 
 page.open('file:///Users/virot/github/playground/index.html', function() {
   var filename = (new Date()).toISOString().substring(0,16).replace(/:/g, '-');
-  page.render(filename + '.png');
-  phantom.exit();
+  window.setTimeout(function () {
+    page.render(filename + '.png');
+    phantom.exit();
+  }, 30000);
 });

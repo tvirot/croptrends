@@ -21,22 +21,20 @@
   var margin = {top: 20, right: 10, bottom: 20, left: 10},
     width = 880 - margin.left - margin.right,
     height = 420 - margin.top - margin.bottom;
-  var color = d3.scale.threshold()
-    .domain([.0, .2, .4, .6, .8])
-    .range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
+  var color = d3.scale.linear()
+    .range(["#dadaeb", "#54278f"]);
+    //.range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
 
   // State variables
   var isMapReady = false; // Don't bind any data unless the map data is loaded.
-  var isCountyDataReady = false;
-  var isStateDataReady = false;
+  var isDataReady = false;
   var selection = {
-    commodity: "BARLEY",
+    commodity: "COTTON",
     group: "FIELD CROPS",
     stat: "AREA HARVESTED",//"PRODUCTION",
-    unit: "$",
     year: "2014"
   };
-  var countyData, stateData;
+  var data;
 
   function init() {
     var vizDiv = d3.select(".viz")[0][0];
@@ -48,9 +46,6 @@
       .attr("height", height + margin.top + margin.bottom)
         .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    counties = svg.append("g")
-      .attr("class", "counties");
 
     states = svg.append("g")
       .attr("class", "states");
@@ -70,16 +65,20 @@
         stateNames[d.id] = d.name;
       });
 
-      d3.json("dat/us.json", function(err2, us) {
+      d3.json("dat/us-states.json", function(err2, us) {
         if (err2) throw err2;
 
-        counties.selectAll("path")
-          .data(topojson.feature(us, us.objects.counties).features)
+        states.selectAll(".state")
+          .data(topojson.feature(us, us.objects.states).features)
           .enter()
             .append("path")
-          .attr("class", "county")
-          .attr("fill", "#ccc")
-          .attr("d", path);
+          .attr("class", "state")
+          .style("fill", "#ccc")
+          .attr("d", path)
+          .on("mouseout", function() {
+            tooltip.style("visibility", "hidden");
+          })
+          .on("mousemove", showTooltip);
 
         states.append("path")
           .datum(topojson.mesh(us, us.objects.states, function(a, b) {
@@ -88,64 +87,93 @@
           .attr("class", "state-outline")
           .attr("d", path);
 
-        states.selectAll("path")
-          .data(topojson.feature(us, us.objects.states).features)
-          .enter()
-            .append("path")
-          .attr("class", "state")
-          .attr("d", path)
-          .on("mouseout", function() {
-            tooltip.style("visibility", "hidden");
-          })
-          .on("mousemove", showTooltip);
-
         isMapReady = true;
       });
     });
   }
 
   function updateData() {
-    isCountyDataReady = false;
-    isStateDataReady = false;
+    isDataReady = false;
 
     var params = {
         "commodity_desc": selection.commodity,
         "group_desc": selection.group,
-        "agg_level_desc": "COUNTY",
+        "agg_level_desc": "STATE",
         "statisticcat_desc": selection.stat,
+        "source_desc": "SURVEY",
         "freq_desc": "ANNUAL",
         "prodn_practice_desc": "ALL PRODUCTION PRACTICES",
         "util_practice_desc": "ALL UTILIZATION PRACTICES",
         "class_desc": "ALL CLASSES",
         "domain_desc": "TOTAL",
         "reference_period_desc": "YEAR",
-        "year__ge": "2010",
+        "year__ge": "2000",
         "value__ne": "(D)"
     };
 
-    // if (selection.stat === "PRODUCTION") {
-    //   params.unit_desc = "$";
-    // }
+    if (selection.stat === "PRODUCTION") {
+      params.unit_desc = "$";
+    }
 
     getData(
       params,
       {},
       function(err, json) {
         if (err) throw err;
-        countyData = json.data;
-        isCountyDataReady = true;
+        // console.log(json);
+
+        data = { extent: [0, 0], unit: json.data[0].unit_desc };
+        values = [];
+        json.data.forEach(function(d) {
+          if (!data.hasOwnProperty(d.year)) {
+            data[d.year] = {};
+          }
+          if (data[d.year].hasOwnProperty(+d.state_fips_code)) {
+            throw "There are multiple records corresponding to (" + d.year + ", " + d.state_name + ")";
+          }
+
+          var value = +d.value.replace(/,/g, "");
+          data[d.year][+d.state_fips_code] = value;
+          values.push(value);
+
+          // if (value > data.extent[1]) {
+          //   data.extent[1] = value;
+          // } else if ((value < data.extent[0]) || (data.extent[0] == 0)) {
+          //   data.extent[0] = value;
+          // }
+        });
+
+        color.domain(d3.extent(values));
+        isDataReady = true;
         updateViz();
-        console.log(json);
+        console.log(data);
       }
     );
   }
 
   function updateViz() {
-
+    //color.domain(data.extent);
+    //console.log(color.quantiles());
+    states.selectAll(".state")
+      .style("fill", function(d) {
+        if (data[selection.year].hasOwnProperty(d.id)) {
+          return color(data[selection.year][d.id]);
+        } else {
+          return "#ddd";
+        }
+      });
   }
 
   function showTooltip(d) {
+    if (!isDataReady) return;
+
     tooltipState.html(stateNames[d.id]);
+    if (data[selection.year].hasOwnProperty(d.id)) {
+      tooltipContent.html(data[selection.year][d.id] + " " +  data.unit);
+    } else {
+      tooltipContent.html("n/a");
+    }
+
     tooltip.style("visibility", "visible")
       .style("left", d3.event.pageX - tooltipOffset[0] + "px")
       .style("top", d3.event.pageY - tooltipOffset[1] + "px");
@@ -182,26 +210,26 @@
   updateData();
 
 
-  getMetaData(
-    {
-      "distinctParams": "agg_level_desc",
-      "group_desc": "FIELD CROPS",
-      // Fixed conditions
-      "statisticcat_desc": "PRICE RECEIVED",
-      //"unit_desc": "$",
-      //"agg_level_desc": "STATE",
-      "freq_desc": "ANNUAL",
-      "prodn_practice_desc": "ALL PRODUCTION PRACTICES",
-      "util_practice_desc": "ALL UTILIZATION PRACTICES",
-      "class_desc": "ALL CLASSES",
-      "domain_desc": "TOTAL"
-    },
-    function(err, json) {
-      if (err) throw err;
-      console.log(json);
-      console.log(JSON.stringify(json.data[0].Values));
-    }
-  );
+  // getMetaData(
+  //   {
+  //     "distinctParams": "agg_level_desc",
+  //     "group_desc": "FIELD CROPS",
+  //     // Fixed conditions
+  //     "statisticcat_desc": "PRICE RECEIVED",
+  //     //"unit_desc": "$",
+  //     //"agg_level_desc": "STATE",
+  //     "freq_desc": "ANNUAL",
+  //     "prodn_practice_desc": "ALL PRODUCTION PRACTICES",
+  //     "util_practice_desc": "ALL UTILIZATION PRACTICES",
+  //     "class_desc": "ALL CLASSES",
+  //     "domain_desc": "TOTAL"
+  //   },
+  //   function(err, json) {
+  //     if (err) throw err;
+  //     console.log(json);
+  //     console.log(JSON.stringify(json.data[0].Values));
+  //   }
+  // );
 
   // getData(
   //   {
