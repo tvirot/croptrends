@@ -8,9 +8,9 @@ body {
 }
 
 /* For debugging layout */
-div {
+/*div {
   border: 1px solid #eee;
-}
+}*/
 
 .hidden_elem {
   display: none;
@@ -195,5 +195,33 @@ p.clear {
 }
 
 .main .viz {
-  height: 50px;
+  position: relative;
 }
+
+.main .viz .tooltip {
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  margin: 12px;
+  padding: 2px;
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+}
+
+.main .viz .tooltip .container {
+  border: 1px solid #666;
+  padding: 8px 16px;
+}
+
+#tooltip-state {
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 2em;
+  text-transform: uppercase;
+}
+
+#tooltip-content {
+  font-size: 14px;
+  text-transform: lowercase;
+}
+

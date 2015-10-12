@@ -10,6 +10,7 @@
 
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" type="text/css">
   <link rel="stylesheet" href="css/layout.css" type="text/css">
+  <link rel="stylesheet" href="css/viz.css" type="text/css">
   <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
 </head>
 
@@ -131,7 +132,14 @@
       </div>
 
       <div class="viz">
-        visualization goes here.
+        <div class="map">
+        </div>
+        <div class="tooltip">
+          <div class="container">
+            <div id="tooltip-state"></div>
+            <div id="tooltip-content"><div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -141,6 +149,8 @@
 </body>
 
 <script src="js/d3.min.js"></script>
+<script src="js/topojson.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>  -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>  -->
 <script src="js/app.js"></script>
 
