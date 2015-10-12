@@ -1,16 +1,18 @@
 body {
-  background-color: #fefefe;
+  background-color: #efefef;
   color: #444;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: 300;
-  margin: 0 20px 0 20px;
+  margin: 0;
+  padding: 0 20px 0 20px;
+  min-width: 960px
 }
 
 /* For debugging layout */
-/*div {
-  border: 1px solid #eee;
-}*/
+div {
+  /*border: 1px solid #eee;*/
+}
 
 .hidden_elem {
   display: none;
@@ -39,17 +41,21 @@ body {
 }
 
 .content {
-  text-align: center;
+  /*text-align: center;*/
   margin-top: 20px;
-  min-width: 1000px;
+  /*min-width: 1000px;*/
 }
 
 .sidebar {
-  display: inline-block;
-  margin-right: 24px;
+  /*display: inline-block;*/
+  margin-right: 20px;
   vertical-align: top;
-  width: 22%;
-  width: calc(25% - 24px);
+/*  width: 22%;
+  width: calc(25% - 24px);*/
+  width: 268px;
+  float: left;
+  border: 1px solid #ccc;
+  background-color: #fff
 }
 
 .search-box {
@@ -79,30 +85,35 @@ body {
 }
 
 .collaspible-menu .group {
-  border: 2px solid #ccc;
-  height: 36px;
-  padding-top: 4px;
+  border-bottom: 1px solid #ccc;
+  height: 52px;
+  /*padding-top: 4px;*/
   vertical-align: baseline;
+}
+
+.collaspible-menu:last-child .group{
+  border-bottom: 0;
 }
 
 .collaspible-menu .group .title {
   display: inline-block;
   float: left;
-  line-height: 30px;
-  padding-left: 12px;
+  line-height: 52px;
+  padding-left: 20px;
   text-transform: uppercase;
+  font-size: 18px
 }
 
 .collaspible-menu.expanded .group .title {
-  font-weight: bold;
+  font-weight: 400;
 }
 
 .collaspible-menu .group .glyphicon {
   color: #666;
   display: inline-block;
   float: right;
-  line-height: 30px;
-  padding-right: 12px;
+  line-height: 52px;
+  padding-right: 20px;
 }
 
 .collaspible-menu.collapsed .group .glyphicon-chevron-up {
@@ -116,9 +127,10 @@ body {
 .collaspible-menu .commodity {
   font-size: 14px;
   padding: 8px 0;
-  height: 200px;
+  height: 300px;
   overflow: scroll;
   text-align: left;
+  border-bottom: 1px solid #ccc;
 }
 
 .collaspible-menu.collapsed .commodity {
@@ -129,23 +141,36 @@ body {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  padding-left: 16px;
+  padding: 0 20px;
 }
 
 .collaspible-menu .commodity li {
   cursor: pointer;
-  line-height: 24px;
-  text-transform: lowercase;
+  line-height: 36px;
+  /*color: #999;*/
+  /*text-transform: lowercase;*/
+  transition-duration: 0.20s;
+  border-bottom: 1px solid #dbdbdb;
 }
 
 .collaspible-menu .commodity li:hover {
   padding-left: 8px;
-  font-weight: bold;
+  /*font-weight: bold;*/
+  /*position: relative;
+  left: 8px;*/
+  color: #000;
+  /*transition: left 1s ease-out;*/
+}
+
+.collaspible-menu .commodity li:last-child {
+  border-bottom: 0;
 }
 
 .main {
-  display: inline-block;
-  width: 74%;
+  /*display: inline-block;*/
+  /*width: 74%;*/
+  width: calc(100% - 292px);
+  float: left;
 }
 
 .main .header {}
