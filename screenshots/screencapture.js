@@ -6,8 +6,8 @@ page.viewportSize = {
   height: 1000*2
 };
 page.zoomFactor = 2;
-
-page.open('file:///Users/clertvic/playground/index.html', function() {
+// file:///Users/clertvic/playground/index.html
+page.open('http://localhost:8080/', function() {
   var filename = (new Date()).toISOString().substring(0,16).replace(/:/g, '-');
   window.setTimeout(function () {
     page.render(filename + '.png');
