@@ -1,7 +1,23 @@
+/*
 .state-outline {
   fill: none;
-  stroke: #fff;
+  stroke: #ccc;
   stroke-linejoin: round;
 }
+*/
 
+.state {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.dot {
+  fill: #00B6A6;
+  visibility: hidden;
+}
+
+.bubble {
+  fill: #00B6A6;
+  fill-opacity: 0.2;
+}
 

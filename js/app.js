@@ -2,11 +2,8 @@
 
   // Constants
   var
-    API = "http://nass-api.azurewebsites.net/api/",
-    GROUP_DESC = ["FIELD CROPS", "FRUIT & TREE NUTS", "VEGETABLES"],
-    YEARS = [1866, 2015],
-    STATES = ["ALABAMA","ALASKA","ARIZONA","ARKANSAS","CALIFORNIA","COLORADO","CONNECTICUT","DELAWARE","FLORIDA","GEORGIA","HAWAII","IDAHO","ILLINOIS","INDIANA","IOWA","KANSAS","KENTUCKY","LOUISIANA","MAINE","MARYLAND","MASSACHUSETTS","MICHIGAN","MINNESOTA","MISSISSIPPI","MISSOURI","MONTANA","NEBRASKA","NEVADA","NEW HAMPSHIRE","NEW JERSEY","NEW MEXICO","NEW YORK","NORTH CAROLINA","NORTH DAKOTA","OHIO","OKLAHOMA","OREGON","PENNSYLVANIA","RHODE ISLAND","SOUTH CAROLINA","SOUTH DAKOTA","TENNESSEE","TEXAS","UTAH","VERMONT","VIRGINIA","WASHINGTON","WEST VIRGINIA","WISCONSIN","WYOMING"],
-    COMMODITIES = [];
+    METADATA_API = "http://nass-api.azurewebsites.net/api/get_dependent_param_values?",
+    DATA_API = "http://nass-api.azurewebsites.net/api/api_get?";
 
   var stateNames = {};
 
@@ -21,15 +18,19 @@
   var margin = {top: 20, right: 10, bottom: 20, left: 10},
     width = 880 - margin.left - margin.right,
     height = 420 - margin.top - margin.bottom;
-  var color = d3.scale.linear()
-    .range(["#dadaeb", "#54278f"]);
+  var radius = d3.scale.sqrt()
+    .range([2, 40]);
+
+  var color = d3.scale.quantile()
+    //.range(["#c2e699", "#78c679", "#31a354", "#006837"]);
+    .range(["#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);//.range(["#00B6A6", "#54278f"]);
     //.range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
 
   // State variables
   var isMapReady = false; // Don't bind any data unless the map data is loaded.
   var isDataReady = false;
   var selection = {
-    commodity: "COTTON",
+    commodity: "BARLEY",
     group: "FIELD CROPS",
     stat: "AREA HARVESTED",//"PRODUCTION",
     year: "2014"
@@ -50,6 +51,9 @@
     states = svg.append("g")
       .attr("class", "states");
 
+    counties = svg.append("g")
+      .attr("class", "counties");
+
     projection = d3.geo.albersUsa()
       .scale(800)
       .translate([width / 2, height / 2]);
@@ -65,7 +69,7 @@
         stateNames[d.id] = d.name;
       });
 
-      d3.json("dat/us-states.json", function(err2, us) {
+      d3.json("dat/us.json", function(err2, us) {
         if (err2) throw err2;
 
         states.selectAll(".state")
@@ -73,19 +77,42 @@
           .enter()
             .append("path")
           .attr("class", "state")
-          .style("fill", "#ccc")
           .attr("d", path)
           .on("mouseout", function() {
             tooltip.style("visibility", "hidden");
           })
           .on("mousemove", showTooltip);
 
-        states.append("path")
-          .datum(topojson.mesh(us, us.objects.states, function(a, b) {
-            return a.id !== b.id;
-          }))
-          .attr("class", "state-outline")
-          .attr("d", path);
+        // states.append("path")
+        //   .datum(topojson.mesh(us, us.objects.states, function(a, b) {
+        //     return a.id !== b.id;
+        //   }))
+        //   .attr("class", "state-outline")
+        //   .attr("d", path);
+
+        counties.selectAll(".bubble")
+          .data(topojson.feature(us, us.objects.counties).features)
+          .enter()
+            .append("circle")
+          .attr("class", "bubble")
+          .attr("transform", function(d) {
+            var centroid = path.centroid(d);
+            if (isNaN(centroid[0])) return;
+            return "translate(" + path.centroid(d) + ")";
+          })
+          .attr("r", 0);
+
+        counties.selectAll(".dot")
+          .data(topojson.feature(us, us.objects.counties).features)
+          .enter()
+            .append("circle")
+          .attr("class", "dot")
+          .attr("transform", function(d) {
+            var centroid = path.centroid(d);
+            if (isNaN(centroid[0])) return;
+            return "translate(" + path.centroid(d) + ")";
+          })
+          .attr("r", 1.5);
 
         isMapReady = true;
       });
@@ -98,7 +125,7 @@
     var params = {
         "commodity_desc": selection.commodity,
         "group_desc": selection.group,
-        "agg_level_desc": "STATE",
+        "agg_level_desc": "COUNTY",
         "statisticcat_desc": selection.stat,
         "source_desc": "SURVEY",
         "freq_desc": "ANNUAL",
@@ -111,56 +138,71 @@
         "value__ne": "(D)"
     };
 
-    if (selection.stat === "PRODUCTION") {
-      params.unit_desc = "$";
-    }
+    // if (selection.stat === "PRODUCTION") {
+    //   params.unit_desc = "$";
+    // }
 
     getData(
       params,
       {},
       function(err, json) {
         if (err) throw err;
+        console.log(JSON.stringify(json));
         // console.log(json);
 
-        data = { extent: [0, 0], unit: json.data[0].unit_desc };
+        data = { unit: json.data[0].unit_desc };
         values = [];
         json.data.forEach(function(d) {
           if (!data.hasOwnProperty(d.year)) {
             data[d.year] = {};
           }
-          if (data[d.year].hasOwnProperty(+d.state_fips_code)) {
-            throw "There are multiple records corresponding to (" + d.year + ", " + d.state_name + ")";
+
+          if (data[d.year].hasOwnProperty(+d.county_code)) {
+            throw "There are multiple records corresponding to (" + d.year + ", county " + d.county_code + ")";
           }
 
           var value = +d.value.replace(/,/g, "");
-          data[d.year][+d.state_fips_code] = value;
+          data[d.year][+(d.state_fips_code + d.county_code)] = value;
           values.push(value);
-
-          // if (value > data.extent[1]) {
-          //   data.extent[1] = value;
-          // } else if ((value < data.extent[0]) || (data.extent[0] == 0)) {
-          //   data.extent[0] = value;
-          // }
         });
 
-        color.domain(d3.extent(values));
+        // color.domain(d3.extent(values));
+        color.domain(values);
+        console.log(color.quantiles());
+        radius.domain(d3.extent(values));
         isDataReady = true;
         updateViz();
-        console.log(data);
+        // console.log(data);
       }
     );
   }
 
   function updateViz() {
-    //color.domain(data.extent);
-    //console.log(color.quantiles());
-    states.selectAll(".state")
+    counties.selectAll(".bubble")
       .style("fill", function(d) {
         if (data[selection.year].hasOwnProperty(d.id)) {
           return color(data[selection.year][d.id]);
-        } else {
-          return "#ddd";
         }
+        return 0;
+      })
+      .attr("r", function(d) {
+        if (data[selection.year].hasOwnProperty(d.id)) {
+          return radius(data[selection.year][d.id]);
+        }
+        return 0;
+      });
+    counties.selectAll(".dot")
+      .style("fill", function(d) {
+        if (data[selection.year].hasOwnProperty(d.id)) {
+          return color(data[selection.year][d.id]);
+        }
+        return 0;
+      })
+      .style("visibility", function(d) {
+        if (data[selection.year].hasOwnProperty(d.id)) {
+          return "visible"
+        }
+        return "hidden";
       });
   }
 
@@ -194,22 +236,23 @@
   }
 
   function getMetaData(params, callback) {
-    var url = API + "get_dependent_param_values?" + genURLparams(params);
+    var url = METADATA_API + genURLparams(params);
     console.log(url);
     d3.json(url, callback);
   }
 
   function getData(params, paramsOR, callback) {
-    var url = API + "api_get?" +
-      genURLparams(params) + genURLparamsOR(paramsOR);
+    var url = DATA_API + genURLparams(params) + genURLparamsOR(paramsOR);
     console.log(url);
-    d3.json(url, callback);
+    console.log("READ FROM LOCAL!!");
+    d3.json('dat/county-sample.json', callback);
+    // d3.json(url, callback);
   }
 
   function changeClass(params){
-    
+
     if (params.classList.contains("expanded")) return;
-    
+
     var x = document.querySelectorAll(".expanded");
     var index;
     for (index = 0; index < x.length; ++index) {
@@ -221,15 +264,15 @@
     params.classList.add("expanded");
   }
 
-  window.onload = function()
-  {
-    document.getElementById("crops").onclick = function() {changeClass(this)};
-    document.getElementById("fruitTreeNuts").onclick = function() {changeClass(this)};
-    document.getElementById("vegetables").onclick = function() {changeClass(this)};
-  }
+  // window.onload = function()
+  // {
+  //   document.getElementById("crops").onclick = function() {changeClass(this)};
+  //   document.getElementById("fruitTreeNuts").onclick = function() {changeClass(this)};
+  //   document.getElementById("vegetables").onclick = function() {changeClass(this)};
+  // }
 
   init();
-  updateData();
+  window.setTimeout(updateData, 2000);
 
   // getMetaData(
   //   {
