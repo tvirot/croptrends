@@ -7,10 +7,10 @@ page.viewportSize = {
 };
 page.zoomFactor = 2;
 
-page.open('file:///Users/clertvic/playground/index.html', function() {
+page.open('http://localhost:8080/index.html', function() {
   var filename = (new Date()).toISOString().substring(0,16).replace(/:/g, '-');
   window.setTimeout(function () {
     page.render(filename + '.png');
     phantom.exit();
-  }, 30000);
+  }, 15000);
 });
