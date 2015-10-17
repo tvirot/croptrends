@@ -20,7 +20,7 @@
   var svg, counties, states, projection, path;
   // TO-DO: Get width and height from DOM to fully support responsive UI
 
-  var miniSVG, timeseries, slider, knob, x, y, brush;
+  var miniSVG, timeseries, slider, knob, x, y, xAxis, yAxis, brush, line;
 
   var radius = d3.scale.sqrt()
     .range([2, 40]);
@@ -37,8 +37,13 @@
     group: "FIELD CROPS",
     stat: "YIELD"
   };
-  var uiSelection = { year: 2014 };
-  var data;
+  var uiSelection = {
+    year: 2014,
+    aggLevel: 'county',
+    state: 6,
+    county: 6029
+  };
+  var data, metadata;
 
   function initMap() {
     var vizDiv = d3.select(".viz")[0][0];
@@ -135,12 +140,12 @@
 
     x = d3.scale.linear()
       .domain([2000, 2014])
-      .range([0, width_])
+      .range([5, width_ - 5])
       .clamp(true);
 
     y = d3.scale.linear()
       .domain([0, 100])
-      .range([lineChartHeight, 0]);
+      .range([lineChartHeight-5, 5]);
 
     brush = d3.svg.brush()
       .x(x)
@@ -155,41 +160,44 @@
 
     timeseries = miniSVG.append("g")
     timeseries.append("rect")
+      .attr("class", "background")
       .attr("width", width_)
-      .attr("height", lineChartHeight)
-      .style("fill", "#fff");
+      .attr("height", lineChartHeight);
+
+    yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .ticks(4)
+      .tickSize(-width_)
+      .tickPadding(12);
 
     timeseries.append("g")
       .attr("class", "y axis")
-      .call(d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(4)
-        .tickSize(-width_)
-        .tickPadding(12)
-      );
+      .call(yAxis);
+
+    xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .tickFormat(function(d) { return d; })
+      .tickSize(-lineChartHeight)
+      .tickPadding(12)
 
     timeseries.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + lineChartHeight + ")")
-      .call(d3.svg.axis()
-        .scale(x)
-        .orient("bottom")
-        .tickFormat(function(d) { return d; })
-        .tickSize(-lineChartHeight)
-        .tickPadding(12)
-      );
+      .call(xAxis);
 
+    sliderBar = d3.svg.axis()
+      .scale(x)
+      .orient("top")
+      .tickFormat("")
+      .tickSize(0)
+      .tickPadding(20);
 
     timeseries.append("g")
       .attr("class", "slider-bar")
       .attr("transform", "translate(0," + (100 + 10 / 2) + ")")
-      .call(d3.svg.axis()
-        .scale(x)
-        .orient("top")
-        .tickFormat("")
-        .tickSize(0)
-        .tickPadding(20))
+      .call(sliderBar)
       .select(".domain")
       .select(function() {
         return this.parentNode.appendChild(this.cloneNode(true));
@@ -211,6 +219,10 @@
       .attr("class", "handle")
       .attr("transform", "translate(0," + 10 / 2 + ")")
       .attr("r", 8);
+
+    line = d3.svg.line()
+      .x(function(d) { return x(d.x); })
+      .y(function(d) { return y(d.y); });
   }
 
   function brushed() {
@@ -257,10 +269,12 @@
       {},
       function(err, json) {
         if (err) throw err;
-        console.log(JSON.stringify(json));
+        // console.log(JSON.stringify(json));
         // console.log(json);
 
-        data = { unit: json.data[0].unit_desc };
+        data = {};
+        metadata = { unit: json.data[0].unit_desc };
+
         values = [];
         json.data.forEach(function(d) {
           if (!data.hasOwnProperty(d.year)) {
@@ -276,18 +290,27 @@
           values.push(value);
         });
 
-        // color.domain(d3.extent(values));
+        metadata.years = Object.keys(data).sort();
+
+        // Update scales
         color.domain(values);
-        console.log(color.quantiles());
+        // color.domain(d3.extent(values));
+        // console.log(color.quantiles());
         radius.domain(d3.extent(values));
+
+
         isDataReady = true;
+
         updateMap();
-        // console.log(data);
+        updateTimeseries();
+        console.log(data);
       }
     );
   }
 
   function updateMap() {
+    if (!isMapReady || !isDataReady) return;
+
     counties.selectAll(".bubble")
       .style("fill", function(d) {
         if (data[uiSelection.year].hasOwnProperty(d.id)) {
@@ -316,12 +339,43 @@
       });
   }
 
+  function updateTimeseries() {
+    // TO-DO: Check aggregation level
+    var lineData = metadata.years
+      .map(function(d) {
+        if (data[d].hasOwnProperty(uiSelection.county)) {
+          return {x: +d, y: data[d][uiSelection.county]};
+        }
+      })
+      .filter(function(d) {
+        return d !== undefined;
+      });
+
+    y.domain(d3.extent(lineData, function(d) { return d.y; }));
+    timeseries.select("g.y.axis")
+      .call(yAxis);
+
+    timeseries.selectAll(".line").remove();
+    timeseries.append("path")
+      .attr("class", "line")
+      .attr("d", line(lineData));
+
+    timeseries.selectAll(".point").remove()
+    timeseries.selectAll(".point")
+      .data(lineData).enter()
+        .append("circle")
+      .attr("class", "point")
+      .attr("r", 4)
+      .attr("cx", function(d) { return x(d.x); })
+      .attr("cy", function(d) { return y(d.y); });
+  }
+
   function showTooltip(d) {
     if (!isDataReady) return;
 
     tooltipState.html(stateNames[d.id]);
     if (data[uiSelection.year].hasOwnProperty(d.id)) {
-      tooltipContent.html(data[uiSelection.year][d.id] + " " +  data.unit);
+      tooltipContent.html(data[uiSelection.year][d.id] + " " +  metadata.unit);
     } else {
       tooltipContent.html("n/a");
     }
