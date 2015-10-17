@@ -14,13 +14,16 @@
   var tooltipOffset = [0][0];
 
   // Viz elements
+  var width = 880;
+  var height = 420;
+
   var svg, counties, states, projection, path;
-  var margin = {top: 20, right: 10, bottom: 20, left: 10},
-    width = 880 - margin.left - margin.right,
-    height = 420 - margin.top - margin.bottom;
+  // TO-DO: Get width and height from DOM to fully support responsive UI
+
+  var miniSVG, timeseries, slider, knob, x, y, brush;
+
   var radius = d3.scale.sqrt()
     .range([2, 40]);
-
   var color = d3.scale.quantile()
     //.range(["#c2e699", "#78c679", "#31a354", "#006837"]);
     .range(["#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);//.range(["#00B6A6", "#54278f"]);
@@ -29,22 +32,26 @@
   // State variables
   var isMapReady = false; // Don't bind any data unless the map data is loaded.
   var isDataReady = false;
-  var selection = {
+  var dataSelection = {
     commodity: "BARLEY",
     group: "FIELD CROPS",
-    stat: "AREA HARVESTED",//"PRODUCTION",
-    year: "2014"
+    stat: "YIELD"
   };
+  var uiSelection = { year: 2014 };
   var data;
 
-  function init() {
+  function initMap() {
     var vizDiv = d3.select(".viz")[0][0];
     tooltipOffset = [vizDiv.offsetLeft, vizDiv.offsetTop];
 
+    var margin = {top: 20, right: 20, bottom: 20, left: 20},
+      width_ = width - margin.left - margin.right,
+      height_ = height - margin.top - margin.bottom;
+
     var mapDiv = d3.select(".map");
     svg = mapDiv.append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", width)
+      .attr("height", height)
         .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -56,7 +63,7 @@
 
     projection = d3.geo.albersUsa()
       .scale(800)
-      .translate([width / 2, height / 2]);
+      .translate([width_ / 2, height_ / 2]);
 
     path = d3.geo.path()
       .projection(projection);
@@ -119,14 +126,117 @@
     });
   }
 
+  function initTimeseries() {
+    var timeseriesDiv = d3.select(".timeseries");
+    var margin = {top: 10, right: 20, left: 50},
+      width_ = width - margin.left - margin.right;
+
+    var lineChartHeight = 64;
+
+    x = d3.scale.linear()
+      .domain([2000, 2014])
+      .range([0, width_])
+      .clamp(true);
+
+    y = d3.scale.linear()
+      .domain([0, 100])
+      .range([lineChartHeight, 0]);
+
+    brush = d3.svg.brush()
+      .x(x)
+      .extent([uiSelection.year, uiSelection.year])
+      .on("brush", brushed);
+
+    miniSVG = timeseriesDiv.append("svg")
+      .attr("width", width)
+      .attr("height", 160)
+        .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    timeseries = miniSVG.append("g")
+    timeseries.append("rect")
+      .attr("width", width_)
+      .attr("height", lineChartHeight)
+      .style("fill", "#fff");
+
+    timeseries.append("g")
+      .attr("class", "y axis")
+      .call(d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(4)
+        .tickSize(-width_)
+        .tickPadding(12)
+      );
+
+    timeseries.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + lineChartHeight + ")")
+      .call(d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        .tickFormat(function(d) { return d; })
+        .tickSize(-lineChartHeight)
+        .tickPadding(12)
+      );
+
+
+    timeseries.append("g")
+      .attr("class", "slider-bar")
+      .attr("transform", "translate(0," + (100 + 10 / 2) + ")")
+      .call(d3.svg.axis()
+        .scale(x)
+        .orient("top")
+        .tickFormat("")
+        .tickSize(0)
+        .tickPadding(20))
+      .select(".domain")
+      .select(function() {
+        return this.parentNode.appendChild(this.cloneNode(true));
+      })
+      .attr("class", "halo");
+
+    slider = miniSVG.append("g")
+      .attr("class", "slider")
+      .attr("transform", "translate(0, " + 100 + ")")
+      .call(brush);
+
+    slider.selectAll(".extent").remove();
+    slider.selectAll(".resize").remove();
+
+    slider.select(".background")
+      .attr("height", 50);
+
+    handle = slider.append("circle")
+      .attr("class", "handle")
+      .attr("transform", "translate(0," + 10 / 2 + ")")
+      .attr("r", 8);
+  }
+
+  function brushed() {
+    var value = Math.round(brush.extent()[0]);
+
+    if (d3.event.sourceEvent) {
+      value = Math.round(x.invert(d3.mouse(this)[0]));
+      brush.extent([value, value]);
+    }
+
+    handle.transition()
+      .duration(25)
+      .attr("cx", x(value));
+
+    uiSelection.year = value;
+    updateMap();
+  }
+
   function updateData() {
     isDataReady = false;
 
     var params = {
-        "commodity_desc": selection.commodity,
-        "group_desc": selection.group,
+        "commodity_desc": dataSelection.commodity,
+        "group_desc": dataSelection.group,
         "agg_level_desc": "COUNTY",
-        "statisticcat_desc": selection.stat,
+        "statisticcat_desc": dataSelection.stat,
         "source_desc": "SURVEY",
         "freq_desc": "ANNUAL",
         "prodn_practice_desc": "ALL PRODUCTION PRACTICES",
@@ -138,7 +248,7 @@
         "value__ne": "(D)"
     };
 
-    // if (selection.stat === "PRODUCTION") {
+    // if (dataSelection.stat === "PRODUCTION") {
     //   params.unit_desc = "$";
     // }
 
@@ -171,35 +281,35 @@
         console.log(color.quantiles());
         radius.domain(d3.extent(values));
         isDataReady = true;
-        updateViz();
+        updateMap();
         // console.log(data);
       }
     );
   }
 
-  function updateViz() {
+  function updateMap() {
     counties.selectAll(".bubble")
       .style("fill", function(d) {
-        if (data[selection.year].hasOwnProperty(d.id)) {
-          return color(data[selection.year][d.id]);
+        if (data[uiSelection.year].hasOwnProperty(d.id)) {
+          return color(data[uiSelection.year][d.id]);
         }
         return 0;
       })
       .attr("r", function(d) {
-        if (data[selection.year].hasOwnProperty(d.id)) {
-          return radius(data[selection.year][d.id]);
+        if (data[uiSelection.year].hasOwnProperty(d.id)) {
+          return radius(data[uiSelection.year][d.id]);
         }
         return 0;
       });
     counties.selectAll(".dot")
       .style("fill", function(d) {
-        if (data[selection.year].hasOwnProperty(d.id)) {
-          return color(data[selection.year][d.id]);
+        if (data[uiSelection.year].hasOwnProperty(d.id)) {
+          return color(data[uiSelection.year][d.id]);
         }
         return 0;
       })
       .style("visibility", function(d) {
-        if (data[selection.year].hasOwnProperty(d.id)) {
+        if (data[uiSelection.year].hasOwnProperty(d.id)) {
           return "visible"
         }
         return "hidden";
@@ -210,8 +320,8 @@
     if (!isDataReady) return;
 
     tooltipState.html(stateNames[d.id]);
-    if (data[selection.year].hasOwnProperty(d.id)) {
-      tooltipContent.html(data[selection.year][d.id] + " " +  data.unit);
+    if (data[uiSelection.year].hasOwnProperty(d.id)) {
+      tooltipContent.html(data[uiSelection.year][d.id] + " " +  data.unit);
     } else {
       tooltipContent.html("n/a");
     }
@@ -264,14 +374,15 @@
     params.classList.add("expanded");
   }
 
-  // window.onload = function()
-  // {
-  //   document.getElementById("crops").onclick = function() {changeClass(this)};
-  //   document.getElementById("fruitTreeNuts").onclick = function() {changeClass(this)};
-  //   document.getElementById("vegetables").onclick = function() {changeClass(this)};
-  // }
+  window.onload = function()
+  {
+    document.getElementById("crops").onclick = function() {changeClass(this)};
+    document.getElementById("fruitTreeNuts").onclick = function() {changeClass(this)};
+    document.getElementById("vegetables").onclick = function() {changeClass(this)};
+  }
 
-  init();
+  initMap();
+  initTimeseries();
   window.setTimeout(updateData, 2000);
 
   // getMetaData(

@@ -21,3 +21,38 @@
   fill-opacity: 0.2;
 }
 
+.axis {
+  font-size: 12px;
+  pointer-event: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.slider-bar .domain {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+  stroke-width: 8px;
+  stroke-linecap: round;
+}
+
+.slider-bar .halo {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 6px;
+  stroke-linecap: round;
+}
+
+.slider .handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: .5;
+  stroke-width: 1.5px;
+  cursor: crosshair;
+}
