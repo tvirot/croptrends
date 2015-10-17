@@ -25,8 +25,8 @@
   var radius = d3.scale.sqrt()
     .range([2, 40]);
   var color = d3.scale.quantile()
-    //.range(["#c2e699", "#78c679", "#31a354", "#006837"]);
-    .range(["#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);//.range(["#00B6A6", "#54278f"]);
+    .range(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);
+    //.range(["#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);//.range(["#00B6A6", "#54278f"]);
     //.range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
 
   // State variables
@@ -84,47 +84,58 @@
       d3.json("dat/us.json", function(err2, us) {
         if (err2) throw err2;
 
-        states.selectAll(".state")
-          .data(topojson.feature(us, us.objects.states).features)
+        /* BUBBLE MAP */
+
+        // states.selectAll(".state")
+        //   .data(topojson.feature(us, us.objects.states).features)
+        //   .enter()
+        //     .append("path")
+        //   .attr("class", "state")
+        //   .attr("d", path)
+        //   .on("mouseout", function() {
+        //     tooltip.style("visibility", "hidden");
+        //   })
+        //   .on("mousemove", showTooltip);
+
+        // counties.selectAll(".bubble")
+        //   .data(topojson.feature(us, us.objects.counties).features)
+        //   .enter()
+        //     .append("circle")
+        //   .attr("class", "bubble")
+        //   .attr("transform", function(d) {
+        //     var centroid = path.centroid(d);
+        //     if (isNaN(centroid[0])) return;
+        //     return "translate(" + path.centroid(d) + ")";
+        //   })
+        //   .attr("r", 0);
+
+        // counties.selectAll(".dot")
+        //   .data(topojson.feature(us, us.objects.counties).features)
+        //   .enter()
+        //     .append("circle")
+        //   .attr("class", "dot")
+        //   .attr("transform", function(d) {
+        //     var centroid = path.centroid(d);
+        //     if (isNaN(centroid[0])) return;
+        //     return "translate(" + path.centroid(d) + ")";
+        //   })
+        //   .attr("r", 1.5);
+
+        /* CHOROPLETH */
+
+        counties.selectAll(".county")
+          .data(topojson.feature(us, us.objects.counties).features)
           .enter()
             .append("path")
-          .attr("class", "state")
-          .attr("d", path)
-          .on("mouseout", function() {
-            tooltip.style("visibility", "hidden");
-          })
-          .on("mousemove", showTooltip);
+          .attr("class", "county")
+          .attr("d", path);
 
-        // states.append("path")
-        //   .datum(topojson.mesh(us, us.objects.states, function(a, b) {
-        //     return a.id !== b.id;
-        //   }))
-        //   .attr("class", "state-outline")
-        //   .attr("d", path);
-
-        counties.selectAll(".bubble")
-          .data(topojson.feature(us, us.objects.counties).features)
-          .enter()
-            .append("circle")
-          .attr("class", "bubble")
-          .attr("transform", function(d) {
-            var centroid = path.centroid(d);
-            if (isNaN(centroid[0])) return;
-            return "translate(" + path.centroid(d) + ")";
-          })
-          .attr("r", 0);
-
-        counties.selectAll(".dot")
-          .data(topojson.feature(us, us.objects.counties).features)
-          .enter()
-            .append("circle")
-          .attr("class", "dot")
-          .attr("transform", function(d) {
-            var centroid = path.centroid(d);
-            if (isNaN(centroid[0])) return;
-            return "translate(" + path.centroid(d) + ")";
-          })
-          .attr("r", 1.5);
+        counties.append("path")
+          .datum(topojson.mesh(us, us.objects.states, function(a, b) {
+            return a.id !== b.id;
+          }))
+          .attr("class", "state-outline")
+          .attr("d", path);
 
         isMapReady = true;
       });
@@ -223,6 +234,13 @@
     line = d3.svg.line()
       .x(function(d) { return x(d.x); })
       .y(function(d) { return y(d.y); });
+
+    slider
+      .call(brush.event)
+    .transition()
+      .duration(750)
+      .call(brush.extent([uiSelection.year, uiSelection.year]))
+      .call(brush.event);
   }
 
   function brushed() {
@@ -311,32 +329,40 @@
   function updateMap() {
     if (!isMapReady || !isDataReady) return;
 
-    counties.selectAll(".bubble")
+    // counties.selectAll(".bubble")
+    //   .style("fill", function(d) {
+    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
+    //       return color(data[uiSelection.year][d.id]);
+    //     }
+    //     return 0;
+    //   })
+    //   .attr("r", function(d) {
+    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
+    //       return radius(data[uiSelection.year][d.id]);
+    //     }
+    //     return 0;
+    //   });
+    // counties.selectAll(".dot")
+    //   .style("fill", function(d) {
+    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
+    //       return color(data[uiSelection.year][d.id]);
+    //     }
+    //     return 0;
+    //   })
+    //   .style("visibility", function(d) {
+    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
+    //       return "visible"
+    //     }
+    //     return "hidden";
+    //   });
+
+    counties.selectAll(".county")
       .style("fill", function(d) {
         if (data[uiSelection.year].hasOwnProperty(d.id)) {
           return color(data[uiSelection.year][d.id]);
         }
-        return 0;
+        return "#fff";
       })
-      .attr("r", function(d) {
-        if (data[uiSelection.year].hasOwnProperty(d.id)) {
-          return radius(data[uiSelection.year][d.id]);
-        }
-        return 0;
-      });
-    counties.selectAll(".dot")
-      .style("fill", function(d) {
-        if (data[uiSelection.year].hasOwnProperty(d.id)) {
-          return color(data[uiSelection.year][d.id]);
-        }
-        return 0;
-      })
-      .style("visibility", function(d) {
-        if (data[uiSelection.year].hasOwnProperty(d.id)) {
-          return "visible"
-        }
-        return "hidden";
-      });
   }
 
   function updateTimeseries() {
