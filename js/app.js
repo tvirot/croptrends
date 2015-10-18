@@ -191,7 +191,8 @@
       .orient("bottom")
       .tickFormat(function(d) { return d; })
       .tickSize(-lineChartHeight)
-      .tickPadding(12)
+      .ticks(12)
+      .tickPadding(12);
 
     timeseries.append("g")
       .attr("class", "x axis")
@@ -274,7 +275,7 @@
         "class_desc": "ALL CLASSES",
         "domain_desc": "TOTAL",
         "reference_period_desc": "YEAR",
-        "year__ge": "2000",
+        // "year__ge": "1900",
         "value__ne": "(D)"
     };
 
@@ -287,8 +288,8 @@
       {},
       function(err, json) {
         if (err) throw err;
-        // console.log(JSON.stringify(json));
-        // console.log(json);
+        console.log(JSON.stringify(json));
+        console.log(json.data.length);
 
         data = {};
         metadata = { unit: json.data[0].unit_desc };
@@ -316,12 +317,15 @@
         // console.log(color.quantiles());
         radius.domain(d3.extent(values));
 
+        x.domain(d3.extent(metadata.years));
+        timeseries.select("g.x.axis")
+          .call(xAxis);
 
         isDataReady = true;
 
         updateMap();
         updateTimeseries();
-        console.log(data);
+        // console.log(data);
       }
     );
   }
@@ -435,7 +439,7 @@
     var url = DATA_API + genURLparams(params) + genURLparamsOR(paramsOR);
     console.log(url);
     console.log("READ FROM LOCAL!!");
-    d3.json('dat/county-sample.json', callback);
+    d3.json('dat/county-sample-big.json', callback);
     // d3.json(url, callback);
   }
 
