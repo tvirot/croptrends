@@ -1,20 +1,41 @@
+/*.map-background {
+  fill: none;
+  pointer-events: all;
+}*/
+
 .county {
   fill: #fff;
-  stroke: #fff;
+  stroke: #fcfcfc;
   stroke-width: 0.5;
-  stroke-opacity: 0.5;
 }
 
 .state-outline {
   fill: none;
   stroke: #ccc;
-  storke-width: 2;
+  stroke-width: 5;
   stroke-linejoin: round;
 }
 
 .state {
   fill: #fff;
-  stroke: #ccc;
+  fill-opacity: 0.0;
+  stroke: #eee;
+  stroke-width: 1;
+  cursor: pointer;
+}
+
+.highlight-inner {
+  fill: none;
+  stroke: #F7AB4E;
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.highlight-outer {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4.5;
+  stroke-linejoin: round;
 }
 
 .dot {
@@ -68,13 +89,27 @@
   stroke: #000;
   stroke-opacity: .5;
   stroke-width: 1.5px;
-  cursor: crosshair;
+  cursor: pointer;
+}
+
+.slider .handle-color {
+  fill: #4eb3d3;
+  stroke: #4eb3d3;
+  stroke-opacity: 0.5;
+  stroke-width: 4;
+  pointer-events: none;
 }
 
 .line {
   fill: none;
   stroke: #4eb3d3;
   stroke-width: 2px;
+}
+
+.point.selected {
+  fill: #fff;
+  stroke: #4eb3d3;
+  stroke-width: 2;
 }
 
 .point {
