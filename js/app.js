@@ -12,12 +12,13 @@
       tooltipState = tooltip.select("#tooltip-state"),
       tooltipContent = tooltip.select("#tooltip-content");
   var tooltipOffset = [0][0];
+  var labels = [];
 
   // Viz elements
   var width = 880;
   var height = 420;
 
-  var svg, counties, states, projection, path;
+  var svg, counties, states, highlight, projection, path;
   // TO-DO: Get width and height from DOM to fully support responsive UI
 
   var miniSVG, timeseries, slider, knob, x, y, xAxis, yAxis, brush, line;
@@ -37,9 +38,9 @@
     group: "FIELD CROPS",
     stat: "YIELD"
   };
-  var uiSelection = {
-    year: 2014,
-    aggLevel: 'county',
+  var uiState = {
+    year: undefined,
+    zoom: d3.select(null),
     state: 6,
     county: 6029
   };
@@ -55,16 +56,21 @@
 
     var mapDiv = d3.select(".map");
     svg = mapDiv.append("svg")
+      .attr("class", "map-background")
       .attr("width", width)
       .attr("height", height)
+      .on("click", resetZoom)
         .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    counties = svg.append("g")
+      .attr("class", "counties");
 
     states = svg.append("g")
       .attr("class", "states");
 
-    counties = svg.append("g")
-      .attr("class", "counties");
+    highlight = svg.append("g")
+      .attr("class", "highlight");
 
     projection = d3.geo.albersUsa()
       .scale(800)
@@ -130,12 +136,35 @@
           .attr("class", "county")
           .attr("d", path);
 
-        counties.append("path")
-          .datum(topojson.mesh(us, us.objects.states, function(a, b) {
-            return a.id !== b.id;
-          }))
-          .attr("class", "state-outline")
-          .attr("d", path);
+        // states.append("path")
+        //   .datum(topojson.mesh(us, us.objects.states, function(a, b) {
+        //     return a.id !== b.id;
+        //   }))
+        //   .attr("class", "state-outline")
+        //   .attr("d", path);
+
+        states.selectAll(".state")
+          .data(topojson.feature(us, us.objects.states).features)
+          .enter()
+            .append("path")
+          .attr("class", "state")
+          .attr("d", path)
+          .on("mouseout", function() {
+            highlight.selectAll('*').remove();
+            changeState(undefined)
+          })
+          .on("mouseover", function(d) {
+            highlight.append("path")
+              .datum(d)
+              .attr("class", "highlight-outer")
+              .attr("d", path);
+            highlight.append("path")
+              .datum(d)
+              .attr("class", "highlight-inner")
+              .attr("d", path);
+            changeState(d.id);
+          })
+          .on("click", zoomed);
 
         isMapReady = true;
       });
@@ -143,6 +172,13 @@
   }
 
   function initTimeseries() {
+    labels.commodity = d3.select("#label-commodity");
+    labels.stat = d3.select("#label-stat");
+    labels.number = d3.select("#label-number");
+    labels.unit = d3.select("#label-unit");
+    labels.region = d3.select("#label-region");
+    labels.year = d3.select("#label-year");
+
     var timeseriesDiv = d3.select(".timeseries");
     var margin = {top: 10, right: 20, left: 50},
       width_ = width - margin.left - margin.right;
@@ -150,7 +186,6 @@
     var lineChartHeight = 64;
 
     x = d3.scale.linear()
-      .domain([2000, 2014])
       .range([5, width_ - 5])
       .clamp(true);
 
@@ -160,8 +195,7 @@
 
     brush = d3.svg.brush()
       .x(x)
-      .extent([uiSelection.year, uiSelection.year])
-      .on("brush", brushed);
+      .on("brush", slided);
 
     miniSVG = timeseriesDiv.append("svg")
       .attr("width", width)
@@ -221,30 +255,93 @@
       .attr("transform", "translate(0, " + 100 + ")")
       .call(brush);
 
-    slider.selectAll(".extent").remove();
-    slider.selectAll(".resize").remove();
-
     slider.select(".background")
-      .attr("height", 50);
+      .attr("height", 10)
+      .style("cursor", "pointer");
 
-    handle = slider.append("circle")
+    handle = slider.append("g")
+      .attr("transform", "translate(0," + 10 / 2 + ")");
+
+    handle.append("circle")
       .attr("class", "handle")
-      .attr("transform", "translate(0," + 10 / 2 + ")")
       .attr("r", 8);
+
+    handle.append("circle")
+      .attr("class", "handle-color")
+      .attr("r", 4);
 
     line = d3.svg.line()
       .x(function(d) { return x(d.x); })
       .y(function(d) { return y(d.y); });
 
-    slider
-      .call(brush.event)
-    .transition()
-      .duration(750)
-      .call(brush.extent([uiSelection.year, uiSelection.year]))
-      .call(brush.event);
+
+    slider.selectAll(".slider .extent").remove();
+    slider.selectAll(".slider .resize").remove();
+
+    // slider
+    //   .call(brush.event)
+    // .transition()
+    //   .duration(750)
+    //   .call(brush.extent([uiState.year, uiState.year]))
+    //   .call(brush.event);
   }
 
-  function brushed() {
+  function resetZoom() {
+    uiState.zoom = d3.select(null);
+    svg.transition()
+      .duration(500)
+      .ease("exp-out")
+      .attr("transform", "");
+
+    setTimeout(function() {
+      states.selectAll("*")
+        .style("visibility", "visible");
+      highlight.selectAll("*")
+        .style("visibility", "visible");
+      counties.selectAll(".county")
+        .style("visibility", "visible")
+        .style("stroke-width", "0.5px");
+    }, 500);
+  }
+
+  function zoomed(state) {
+    d3.event.stopPropagation();
+
+    // TO-DO: If no data, return.
+
+    if (uiState.zoom.node() === this) return resetZoom();
+    uiState.zoom = d3.select(this);
+
+    var bounds = path.bounds(state),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+      scale = .8 / Math.max(dx / width, dy / height),
+      translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+    svg.transition()
+      .duration(500)
+      .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+
+    highlight.selectAll("*")
+        .style("visibility", "hidden");
+
+    states.selectAll("*")
+      .style("visibility", "hidden");
+
+    counties.selectAll(".county")
+      .style("visibility", function(d) {
+        if (Math.floor(d.id / 1000) === state.id) {
+          return "visible";
+        }
+        return "hidden";
+      })
+      .style("stroke-width", 1.0 / scale + "px");
+
+  }
+
+  function slided() {
     var value = Math.round(brush.extent()[0]);
 
     if (d3.event.sourceEvent) {
@@ -252,12 +349,45 @@
       brush.extent([value, value]);
     }
 
-    handle.transition()
+    handle.selectAll("circle")
+      .transition()
       .duration(25)
       .attr("cx", x(value));
 
-    uiSelection.year = value;
+    changeYear(value);
+  }
+
+  function changeState(stateID) {
+    uiState.state = stateID;
+    updateTimeseries();
+    if (!uiState.state) {
+      labels.region.html('National');
+    } else {
+      labels.region.html(stateNames[stateID]);
+    }
+    updateNumberLabel();
+  }
+
+  function changeYear(year) {
+    uiState.year = year;
+
     updateMap();
+    updateTimeseries(); // TO-DO: Consider removing this.
+
+    labels.year.html(year);
+    updateNumberLabel();
+  }
+
+  function changeCounty(countyID) {
+    updateNumberLabel()
+  }
+
+  function toggleZoom() {
+    updateNumberLabel()
+  }
+
+  function updateNumberLabel() {
+    labels.number.html('stat_here');
   }
 
   function updateData() {
@@ -288,8 +418,8 @@
       {},
       function(err, json) {
         if (err) throw err;
-        console.log(JSON.stringify(json));
-        console.log(json.data.length);
+        // console.log(JSON.stringify(json));
+        // console.log(json.data.length);
 
         data = {};
         metadata = { unit: json.data[0].unit_desc };
@@ -321,10 +451,23 @@
         timeseries.select("g.x.axis")
           .call(xAxis);
 
+        labels.commodity.html(dataSelection.commodity);
+        labels.stat.html(dataSelection.stat);
+        labels.unit.html(metadata.unit);
+        if (uiState.year &&
+            uiState.year <= metadata.years[1] &&
+            uiState.year >= metadata.years[0]) {
+          changeYear(uiState.year);
+        } else {
+          changeYear(metadata.years[0]);
+        }
+
         isDataReady = true;
 
         updateMap();
         updateTimeseries();
+        updateNumberLabel();
+
         // console.log(data);
       }
     );
@@ -335,26 +478,26 @@
 
     // counties.selectAll(".bubble")
     //   .style("fill", function(d) {
-    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
-    //       return color(data[uiSelection.year][d.id]);
+    //     if (data[uiState.year].hasOwnProperty(d.id)) {
+    //       return color(data[uiState.year][d.id]);
     //     }
     //     return 0;
     //   })
     //   .attr("r", function(d) {
-    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
-    //       return radius(data[uiSelection.year][d.id]);
+    //     if (data[uiState.year].hasOwnProperty(d.id)) {
+    //       return radius(data[uiState.year][d.id]);
     //     }
     //     return 0;
     //   });
     // counties.selectAll(".dot")
     //   .style("fill", function(d) {
-    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
-    //       return color(data[uiSelection.year][d.id]);
+    //     if (data[uiState.year].hasOwnProperty(d.id)) {
+    //       return color(data[uiState.year][d.id]);
     //     }
     //     return 0;
     //   })
     //   .style("visibility", function(d) {
-    //     if (data[uiSelection.year].hasOwnProperty(d.id)) {
+    //     if (data[uiState.year].hasOwnProperty(d.id)) {
     //       return "visible"
     //     }
     //     return "hidden";
@@ -362,19 +505,21 @@
 
     counties.selectAll(".county")
       .style("fill", function(d) {
-        if (data[uiSelection.year].hasOwnProperty(d.id)) {
-          return color(data[uiSelection.year][d.id]);
+        if (data[uiState.year].hasOwnProperty(d.id)) {
+          return color(data[uiState.year][d.id]);
         }
         return "#fff";
       })
   }
 
   function updateTimeseries() {
+    if (!isMapReady || !isDataReady) return;
+
     // TO-DO: Check aggregation level
     var lineData = metadata.years
       .map(function(d) {
-        if (data[d].hasOwnProperty(uiSelection.county)) {
-          return {x: +d, y: data[d][uiSelection.county]};
+        if (data[d].hasOwnProperty(uiState.county)) {
+          return {x: +d, y: data[d][uiState.county]};
         }
       })
       .filter(function(d) {
@@ -395,6 +540,7 @@
       .data(lineData).enter()
         .append("circle")
       .attr("class", "point")
+      .classed("selected", function(d) { return d.x == uiState.year; })
       .attr("r", 4)
       .attr("cx", function(d) { return x(d.x); })
       .attr("cy", function(d) { return y(d.y); });
@@ -404,8 +550,8 @@
     if (!isDataReady) return;
 
     tooltipState.html(stateNames[d.id]);
-    if (data[uiSelection.year].hasOwnProperty(d.id)) {
-      tooltipContent.html(data[uiSelection.year][d.id] + " " +  metadata.unit);
+    if (data[uiState.year].hasOwnProperty(d.id)) {
+      tooltipContent.html(data[uiState.year][d.id] + " " +  metadata.unit);
     } else {
       tooltipContent.html("n/a");
     }
