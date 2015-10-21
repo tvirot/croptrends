@@ -1,17 +1,37 @@
 body {
   background-color: #efefef;
-  color: #444;
-  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #333;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: 300;
-  margin: 0;
-  padding: 0 20px 0 20px;
-  min-width: 960px
+  margin: 0 auto;
+  padding: 10px 20px 0 20px;
+  width: 960px
 }
 
 /* For debugging layout */
 div {
   /*border: 1px solid #eee;*/
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.green {
+  color: #0ac775;
+}
+
+.blue {
+  color: #4eb3d3;
 }
 
 .hidden_elem {
@@ -52,12 +72,11 @@ div {
   vertical-align: top;
 /*  width: 22%;
   width: calc(25% - 24px);*/
-  width: 268px;
+  width: 155px;
   float: left;
-  border: 1px solid #ccc;
-  border-bottom: 0;
+  border-bottom: 1px solid #ccc;
   background-color: #fff;
-  /*transition-duration: 1s;*/
+  border-radius: 3px;
 }
 
 .search-box {
@@ -91,10 +110,11 @@ div {
 }
 
 .collaspible-menu .group {
-  border-bottom: 1px solid #ccc;
-  height: 52px;
+  border-bottom: 1px solid #efefef;
+  height: 30px;
   /*padding-top: 4px;*/
   vertical-align: baseline;
+  text-align: center;
 }
 
 .collaspible-menu:last-child .group{
@@ -103,19 +123,19 @@ div {
 
 .collaspible-menu .group .title {
   display: inline-block;
-  float: left;
-  line-height: 52px;
-  padding-left: 20px;
+  line-height: 30px;
   text-transform: uppercase;
-  font-size: 18px
+  font-size: 13px;
+  width: 100%;
 }
 
 .collaspible-menu.expanded .group {
-  cursor: default;
+  
 }
 
 .collaspible-menu.expanded .group .title {
   font-weight: 400;
+  color: #666;
 }
 
 .collaspible-menu .group .glyphicon {
@@ -127,7 +147,7 @@ div {
 }
 
 .collaspible-menu.collapsed .group {
-  cursor: pointer;
+  
 }
 
 .collaspible-menu.collapsed .group .glyphicon-chevron-up {
@@ -139,12 +159,13 @@ div {
 }
 
 .collaspible-menu .commodity {
-  font-size: 14px;
-  padding: 8px 0;
-  height: 300px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #666;
+  padding: 10px 0;
+  height: auto;
   overflow: scroll;
   text-align: left;
-  border-bottom: 1px solid #ccc;
 }
 
 .collaspible-menu.collapsed .commodity {
@@ -155,35 +176,33 @@ div {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  padding: 0 20px;
 }
 
 .collaspible-menu .commodity li {
+  padding: 0 20px;
   cursor: pointer;
-  line-height: 36px;
-  /*color: #999;*/
-  /*text-transform: lowercase;*/
-  transition-duration: 0.20s;
-  border-bottom: 1px solid #dbdbdb;
+  line-height: 20px;
+  transition-duration: 0.05s;
 }
 
 .collaspible-menu .commodity li:hover {
-  padding-left: 8px;
-  /*font-weight: bold;*/
-  /*position: relative;
-  left: 8px;*/
-  color: #000;
-  /*transition: left 1s ease-out;*/
+  color: #0ac775;
 }
 
-.collaspible-menu .commodity li:last-child {
-  border-bottom: 0;
+.collaspible-menu .commodity .current,
+.collaspible-menu .commodity .current:hover {
+  color: #fff;
+  background-color: #0ac775;
 }
+
+
+
 
 .main {
   /*display: inline-block;*/
   /*width: 74%;*/
-  width: calc(100% - 292px);
+  /*width: calc(100% - 175px);*/
+  width: 725px;
   float: left;
 }
 
@@ -264,3 +283,20 @@ p.clear {
   text-transform: lowercase;
 }
 
+.sideicons {
+  width: 40px;
+  float: left;
+  padding-left: 20px;
+}
+
+.icon {
+  height: 40px;
+  width: 40px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+  border-radius: 50%;
+  /*background-color: #fff;*/
+}
+
+.icon-planted {
+  background-image: url("/icons/planted.svg");
+}

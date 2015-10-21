@@ -6,6 +6,7 @@
 .county {
   fill: #fff;
   stroke: #fcfcfc;
+  /*stroke: #fcfcfc;*/
   stroke-width: 0.5;
 }
 
@@ -27,14 +28,22 @@
 .highlight-inner {
   fill: none;
   stroke: #F7AB4E;
+  /*stroke: #074d8a;*/
+  /*stroke: #064780;*/
+  /*stroke: #183154;*/
+  /*opacity: 0.9;*/
   stroke-width: 1;
   stroke-linejoin: round;
+/*  stroke: #074d8a;
+  stroke-width: 1.5;*/
 }
 
 .highlight-outer {
   fill: none;
   stroke: #fff;
   stroke-width: 4.5;
+  /*stroke: #074d8a;*/
+  /*stroke-width: 1.5;*/
   stroke-linejoin: round;
 }
 

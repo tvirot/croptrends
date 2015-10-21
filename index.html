@@ -8,8 +8,7 @@
 
   <title>USDA Innovation Challenge</title>
 
-  <!-- <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' type='text/css'> -->
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,800" type="text/css">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' type='text/css'>
   <link rel="stylesheet" href="css/layout.css" type="text/css">
   <link rel="stylesheet" href="css/viz.css" type="text/css">
   <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -17,7 +16,10 @@
 
 <body>
   <div class="header">
-    <h1>Some Cool Project Name</h1>
+    <h1>
+    <span class="green">crop</span><span class="blue">trends</span>
+    </h1>
+    <h4>Exploring annual county-level data of U.S. major commodities since 1900</h4>
   </div>
 
 <!--   <div class="navbar">
@@ -42,31 +44,39 @@
 
       <div class="collaspible-menu expanded" id="crops">
         <div class="group">
-          <div class="title">FIELD CROPS</div>
-          <div class="glyphicon glyphicon-chevron-up" aria-hidden="true"></div>
-          <div class="glyphicon glyphicon-chevron-down" aria-hidden="true"></div>
+          <div class="title">COMMODITY</div>
         </div>
         <div class="commodity">
           <ul>
-            <li>Barley</li>
+            <li class="current">Barley</li>
+            <li>Beans (dry edible)</li>
             <li>Canola</li>
-            <li>Cotton</li>
+            <li>Corn</li>
+            <li>Cotton (pima)</li>
+            <li>Cotton (upland)</li>
             <li>Flaxseed</li>
-            <li>Lentils</li>
+            <li>Hay (alfalfa)</li>
+            <li>Hay (other)</li>
             <li>Oats</li>
-            <li>Peanuts</li>
+            <li>Peanuts</li>            
             <li>Rice</li>
-            <li>Rye</li>
-            <li>Safflower</li>
+            <li>Sorghum</li>
             <li>Soybeans</li>
             <li>Sugarbeets</li>
-            <li>Sunflower</li>
-            <li>Wheat</li>
+            <li>Sugarcane</li>
+            <li>Sunflower (oil)</li>
+            <li>Sunflower (non-oil)</li>
+            <li>Sweet potatoes</li>
+            <li>Tobacco (burley)</li>
+            <li>Tobacco (flue-cured)</li>
+            <li>Wheat (durum)</li>
+            <li>Wheat (spring)</li>
+            <li>Wheat (winter)</li>
           </ul>
         </div>
       </div>
 
-      <div class="collaspible-menu collapsed" id="fruitTreeNuts">
+<!--       <div class="collaspible-menu collapsed" id="fruitTreeNuts">
         <div class="group">
           <div class="title">FRUIT & TREE NUTS</div>
           <div class="glyphicon glyphicon-chevron-up" aria-hidden="true"></div>
@@ -112,12 +122,12 @@
             <li>OTHER6</li>
           </ul>
         </div>
-      </div>
-    </div>
+      </div> -->
+    </div> 
 
     <div class="main">
 
-      <div class="header">
+<!--       <div class="header">
         <div class="summary">
           <span id="summary-key">Total field crops production in 2010</span>
           <br/>
@@ -132,7 +142,7 @@
           </ul>
         </div>
         <p class="clear"></p>
-      </div>
+      </div> -->
 
       <div class="viz">
         <div class="map">
@@ -157,7 +167,9 @@
       </div>
 
     </div>
-
+    <div class="sideicons">
+    <div class="icon icon-planted"></div>
+    </div>
   </div>
 
 </body>

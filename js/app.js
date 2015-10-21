@@ -15,7 +15,7 @@
   var labels = [];
 
   // Viz elements
-  var width = 880;
+  var width = 725;
   var height = 420;
 
   var svg, counties, states, highlight, projection, path;
