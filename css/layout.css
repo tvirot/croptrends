@@ -23,7 +23,7 @@ h1 {
 h4 {
   font-size: 13px;
   font-weight: 400;
-  margin-top: 4px;
+  margin: 4px 0 0 0;
 }
 
 .green {
@@ -32,6 +32,20 @@ h4 {
 
 .blue {
   color: #4eb3d3;
+}
+
+.header .title {
+  display: inline-block;
+  float: left;
+}
+
+.header .info {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 400;
+  color: #999;
+  float: right;
+  margin-top: 18px;
 }
 
 .hidden_elem {
@@ -75,7 +89,7 @@ h4 {
   width: 155px;
   float: left;
   border-bottom: 1px solid #ccc;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 3px;
 }
 
@@ -189,8 +203,8 @@ h4 {
   color: #0ac775;
 }
 
-.collaspible-menu .commodity .current,
-.collaspible-menu .commodity .current:hover {
+.collaspible-menu .commodity .active,
+.collaspible-menu .commodity .active:hover {
   color: #fff;
   background-color: #0ac775;
 }
@@ -289,14 +303,120 @@ p.clear {
   padding-left: 20px;
 }
 
+.sideicons .section {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.sideicons .section:last-child {
+  border-bottom: 0;
+}
+
 .icon {
   height: 40px;
   width: 40px;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
   border-radius: 50%;
   /*background-color: #fff;*/
+  margin-bottom: 15px;
+  transition-duration: 0.1s;
+}
+
+.icon-list-view {
+  background-image: url("/icons/list-view.svg");
+  background-repeat: no-repeat;
+  /*margin-bottom: 15px*/
+}
+
+.icon-list-view:hover {
+  background-image: url("/icons/list-view-hover.svg");
+}
+
+.icon-list-view:active {
+  background-image: url("/icons/list-view-active.svg");
+}
+
+.icon-map-view {
+  background-image: url("/icons/map-view.svg");
+  background-repeat: no-repeat;
+  /*margin-bottom: 15px*/
+}
+
+.icon-map-view:hover {
+  background-image: url("/icons/map-view-hover.svg");
+}
+
+.icon-map-view:active {
+  background-image: url("/icons/map-view-active.svg");
 }
 
 .icon-planted {
   background-image: url("/icons/planted.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-planted:hover {
+  background-image: url("/icons/planted-hover.svg");
+}
+
+.icon-planted:active {
+  background-image: url("/icons/planted-active.svg");
+}
+
+.icon-harvested {
+  background-image: url("/icons/harvested.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-harvested:hover {
+  background-image: url("/icons/harvested-hover.svg");
+}
+
+.icon-harvested:active {
+  background-image: url("/icons/harvested-active.svg");
+}
+
+.icon-yield {
+  background-image: url("/icons/yield.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-yield:hover {
+  background-image: url("/icons/yield-hover.svg");
+}
+
+.icon-yield.active,
+.icon-yield:active {
+  background-image: url("/icons/yield-active.svg");
+}
+
+.icon-production {
+  background-image: url("/icons/production.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-production:hover {
+  background-image: url("/icons/production-hover.svg");
+}
+
+.icon-production:active {
+  background-image: url("/icons/production-active.svg");
+}
+
+.icon-legend {
+  background-image: url("/icons/legend.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-legend:hover {
+  background-image: url("/icons/legend-hover.svg");
+}
+
+.icon-info {
+  height: 16px;
+  width: 16px;
+  background-image: url("/icons/info.svg");
+  background-repeat: no-repeat;
+  margin-bottom: -3px;
+  display: inline-block;
 }
