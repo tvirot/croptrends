@@ -585,42 +585,9 @@
     var url = DATA_API + genURLparams(params) + genURLparamsOR(paramsOR);
     console.log(url);
     console.log("READ FROM LOCAL!!");
-    console.log($('#popoverLegend').html());
     d3.json('dat/county-sample-big.json', callback);
     // d3.json(url, callback);
   }
-
-  // function changeClass(params){
-
-  //   if (params.classList.contains("expanded")) return;
-
-  //   var x = document.querySelectorAll(".expanded");
-  //   var index;
-  //   for (index = 0; index < x.length; ++index) {
-  //     x[index].classList.remove("expanded");
-  //     x[index].classList.add("collapsed");
-  //   }
-
-  //   params.classList.remove("collapsed");
-  //   params.classList.add("expanded");
-  // }
-
-  // window.onload = function()
-  // {
-  //   document.getElementById("crops").onclick = function() {changeClass(this)};
-  //   document.getElementById("fruitTreeNuts").onclick = function() {changeClass(this)};
-  //   document.getElementById("vegetables").onclick = function() {changeClass(this)};
-  // }
-
-//  $(document).ready(function(){
-//     $('[data-toggle="tooltip"]').tooltip();
-//     // $('[data-toggle="popover"]').popover()
-// });
-
-    // title: function() {
-    //   // console.log($('#popoverLegend').html(););
-    //   return $('#popoverLegend').html();
-    // })
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
@@ -637,16 +604,6 @@ $(function () {
     '<div><span class="concentration level6"></span><span>80 - 89.9</span></div>' +
     '<div><span class="concentration level7"></span><span>90 +</span></div>'
     });
-
-  // $('[data-toggle="popover"]').popover()
-  // $('.icon-legend').popover({
-  //   html: true,
-  //   title: "Bushels per acre",
-  //   content: function() {
-  //     return $('#popoverLegend').html();
-  //   },
-  //   placement: "left"
-  // }); 
 })
 
   initMap();

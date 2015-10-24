@@ -440,46 +440,11 @@ p.clear {
     font-weight: 400;
 }
 
-/*.icon + .tooltip > .tooltip-inner .title {
-    font-size: 13px;
-    font-weight: 400;
-    margin: 0 10px 0 0;
-}*/
-
-/*.icon + .popover {
-    position: absolute;
-}
-
-.icon + .popover > .popover-title {
-    background-color: #333; 
-    color: #fff;
-    font-weight: 400;
-    padding: 10px;
-    /*padding: 10px 20px 10px 10px;
-    font-size: 13px;
-    border-radius: 3px 3px 0 0 ;
-    margin: 0 10px 0 0;
-}
-
-/*.icon + .popover > .popover-content {
-    background-color: #333; 
-    color: #fff;
-    font-weight: 300;
-    padding: 10px;
-    padding: 0 10px 10px 10px;
-    font-size: 12px;
-    border-radius: 0 0 3px 3px;
-    margin-right: 10px;
-}*/
-
-
-
 .concentration {
   height: 14px;
   width: 14px;
-  /*border-radius: 3px;*/
   float: left;
-  margin: 1px 10px 0 0;
+  margin: 2px 10px 0 0;
 }
 
 .concentration.level1 {
