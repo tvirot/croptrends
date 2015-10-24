@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/layout.css" type="text/css">
   <link rel="stylesheet" href="css/viz.css" type="text/css">
   <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <script src="js/jquery-1.11.3.min.js"></script>
 </head>
 
 <body>
@@ -174,16 +175,46 @@
     </div>
     <div class="sideicons">
     <div class="section">
-      <div class="icon icon-list-view"></div>
+      <div class="icon icon-list-view" data-toggle="tooltip" data-placement="left" title="List View"></div>
     </div>
     <div class="section">
-      <div class="icon icon-planted"></div>
-      <div class="icon icon-harvested"></div>
-      <div class="icon icon-yield active"></div>
-      <div class="icon icon-production"></div>
+      <div class="icon icon-planted" data-toggle="tooltip" data-placement="left" title="Planted"></div>
+      <div class="icon icon-harvested" data-toggle="tooltip" data-placement="left" title="Harvested"></div>
+      <div class="icon icon-yield active" data-toggle="tooltip" data-placement="left" title="Yield"></div>
+      <div class="icon icon-production" data-toggle="tooltip" data-placement="left" title="Production"></div>
     </div>
     <div class="section">
       <div class="icon icon-legend"></div>
+      <!-- <div id="popoverLegend" style="display: none">
+      <div>
+        <div class="concentration level1"></div>
+        <span>Not estimated</span>
+      </div>
+      <div>
+        <div class="concentration level2"></div>
+        <span>< 50</span>
+      </div>
+      <div>
+        <div class="concentration level3"></div>
+        <span>50 - 59.9</span>
+      </div>
+      <div>
+        <div class="concentration level4"></div>
+        <span>60 - 69.9</span>
+      </div>
+      <div>
+        <div class="concentration level5"></div>
+        <span>70 - 79.9</span>
+      </div>  
+      <div>
+        <div class="concentration level6"></div>
+        <span>80 - 89.9</span>
+      </div>
+      <div>
+        <div class="concentration level7"></div>
+        <span>90 +</span>
+      </div> -->
+      </div> 
     </div>
     </div>
   </div>
@@ -195,5 +226,6 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>  -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>  -->
 <script src="js/app.js"></script>
+<script src="js/bootstrap.min.js"></script>
 
 </html>
