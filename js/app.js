@@ -361,7 +361,7 @@
     uiState.state = stateID;
     updateTimeseries();
     if (!uiState.state) {
-      labels.region.html('National');
+      labels.region.html('United States');
     } else {
       labels.region.html(stateNames[stateID]);
     }
@@ -387,7 +387,7 @@
   }
 
   function updateNumberLabel() {
-    labels.number.html('stat_here');
+    labels.number.html(data[uiState.year][uiState.county]);
   }
 
   function updateData() {
@@ -452,8 +452,10 @@
           .call(xAxis);
 
         labels.commodity.html(dataSelection.commodity);
-        labels.stat.html(dataSelection.stat);
-        labels.unit.html(metadata.unit);
+        // labels.stat.html(dataSelection.stat);
+        // labels.unit.html(metadata.unit);
+        labels.stat.html("Yield");
+        labels.unit.html("bushels per acre");
         if (uiState.year &&
             uiState.year <= metadata.years[1] &&
             uiState.year >= metadata.years[0]) {

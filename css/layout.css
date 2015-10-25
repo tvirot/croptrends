@@ -2,7 +2,7 @@ body {
   background-color: #efefef;
   color: #333;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 300;
   margin: 0 auto;
   padding: 10px 20px 0 20px;
@@ -473,4 +473,33 @@ p.clear {
 
 .concentration.level7 {
   background-color: #08589e;
+}
+
+#label-stat {
+  float: right;
+  /*text-transform: uppercase;*/
+}
+
+#label-number {
+  margin-right: 5px;
+  float: right;
+}
+
+#label-unit {
+  float: right;
+}
+
+#label-region {
+  float: left;
+}
+
+#label-year {
+  float: left;
+}
+
+.label {
+  padding: 0 19px 0 50px;
+  font-size: 14px;
+  font-weight: 300;
+  color: #666;
 }
