@@ -1,5 +1,5 @@
 body {
-  background-color: #fff;
+  background-color: #efefef;
   color: #333;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -11,7 +11,7 @@ body {
 
 body.about {
   padding: 0 20px 0 20px;
-  background-color: #efefef;
+  /*background-color: #efefef;*/
 }
 
 /* For debugging layout */
