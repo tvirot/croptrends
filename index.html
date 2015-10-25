@@ -11,8 +11,6 @@
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' type='text/css'>
   <link rel="stylesheet" href="css/layout.css" type="text/css">
   <link rel="stylesheet" href="css/viz.css" type="text/css">
-  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-  <script src="js/jquery-1.11.3.min.js"></script>
 </head>
 
 <body>
@@ -28,25 +26,9 @@
     <p class="clear"></p>
   </div>
 
-<!--   <div class="navbar">
-    <ul>
-      <li class="selected"><a href="#">Crops</a></li>
-      <li><a href="#">Economics</a></li>
-      <li><a href="#">Help</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-  </div> -->
-
   <div class="content">
 
     <div class="sidebar">
-
-<!--       <div class="search">
-        <div class="search-box">
-          <div class="glyphicon glyphicon-search" aria-hidden="true"></div>
-          <input placeholder="Cabbage, Cotton, Banana">
-        </div>
-      </div> -->
 
       <div class="collaspible-menu expanded" id="crops">
         <div class="group">
@@ -54,101 +36,13 @@
         </div>
         <div class="commodity">
           <ul>
-            <li class="active">Barley</li>
-            <li>Beans (dry edible)</li>
-            <li>Canola</li>
-            <li>Corn</li>
-            <li>Cotton (pima)</li>
-            <li>Cotton (upland)</li>
-            <li>Flaxseed</li>
-            <li>Hay (alfalfa)</li>
-            <li>Hay (other)</li>
-            <li>Oats</li>
-            <li>Peanuts</li>            
-            <li>Rice</li>
-            <li>Sorghum</li>
-            <li>Soybeans</li>
-            <li>Sugarbeets</li>
-            <li>Sugarcane</li>
-            <li>Sunflower (oil)</li>
-            <li>Sunflower (non-oil)</li>
-            <li>Sweet potatoes</li>
-            <li>Tobacco (burley)</li>
-            <li>Tobacco (flue-cured)</li>
-            <li>Wheat (durum)</li>
-            <li>Wheat (spring)</li>
-            <li>Wheat (winter)</li>
           </ul>
         </div>
       </div>
 
-<!--       <div class="collaspible-menu collapsed" id="fruitTreeNuts">
-        <div class="group">
-          <div class="title">FRUIT & TREE NUTS</div>
-          <div class="glyphicon glyphicon-chevron-up" aria-hidden="true"></div>
-          <div class="glyphicon glyphicon-chevron-down" aria-hidden="true"></div>
-        </div>
-        <div class="commodity">
-          <ul>
-            <li>BARLEY</li>
-            <li>BEANS</li>
-            <li>CORN</li>
-            <li>COTTON</li>
-            <li>FEED GRAINS</li>
-            <li>FLAXSEED</li>
-            <li>OTHER1</li>
-            <li>OTHER2</li>
-            <li>OTHER3</li>
-            <li>OTHER4</li>
-            <li>OTHER5</li>
-            <li>OTHER6</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="collaspible-menu collapsed" id="vegetables">
-        <div class="group">
-          <div class="title">VEGETABLES</div>
-          <div class="glyphicon glyphicon-chevron-up" aria-hidden="true"></div>
-          <div class="glyphicon glyphicon-chevron-down" aria-hidden="true"></div>
-        </div>
-        <div class="commodity">
-          <ul>
-            <li>BARLEY</li>
-            <li>BEANS</li>
-            <li>CORN</li>
-            <li>COTTON</li>
-            <li>FEED GRAINS</li>
-            <li>FLAXSEED</li>
-            <li>OTHER1</li>
-            <li>OTHER2</li>
-            <li>OTHER3</li>
-            <li>OTHER4</li>
-            <li>OTHER5</li>
-            <li>OTHER6</li>
-          </ul>
-        </div>
-      </div> -->
-    </div> 
+    </div>
 
     <div class="main">
-
-<!--       <div class="header">
-        <div class="summary">
-          <span id="summary-key">Total field crops production in 2010</span>
-          <br/>
-          <span id="summary-value">$157,083 Million</span>
-        </div>
-        <div class="toggle">
-          <ul>
-            <li>planted</li>
-            <li>harvested</li>
-            <li>yield</li>
-            <li class="selected">production</li>
-          </ul>
-        </div>
-        <p class="clear"></p>
-      </div> -->
 
       <div class="viz">
         <div class="map">
@@ -162,23 +56,16 @@
       </div>
 
       <div class="label">
-        <span id="label-region"></span>
-        <span id="label-stat"></span>
+        <span id="label-region">California</span>
+        <span id="label-stat">Yield</span>
       </div>
       <p class="clear"></p>
       <div class="label">
-        <span id="label-year"></span>
-        <span id="label-unit"></span>
-        <span id="label-number"></span>
+        <span id="label-year">1990</span>
+        <span id="label-unit">BU</span>
+        <span id="label-number">12,345</span>
       </div>
 
-<!--         <span id="label-commodity"></span> |
-        <span id="label-stat"></span> |
-        <span id="label-number"></span> |
-        <span id="label-unit"></span> |
-        <span id="label-region"></span> |
-        <span id="label-year"></span>
-      </div> -->
       <div class="timeseries">
       </div>
 
@@ -195,13 +82,13 @@
     </div>
     <div class="section">
       <div class="icon icon-legend"></div>
-    </div> 
+    </div>
     </div>
     </div>
   </div>
 
 </body>
-
+<script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/d3.min.js"></script>
 <script src="js/topojson.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>  -->
