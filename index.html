@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/layout.css" type="text/css">
   <link rel="stylesheet" href="css/viz.css" type="text/css">
   <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <script src="js/jquery-1.11.3.min.js"></script>
 </head>
 
 <body>
@@ -160,30 +161,41 @@
         </div>
       </div>
 
-      <div>
-        <span id="label-commodity"></span> |
+      <div class="label">
+        <span id="label-region"></span>
+        <span id="label-stat"></span>
+      </div>
+      <p class="clear"></p>
+      <div class="label">
+        <span id="label-year"></span>
+        <span id="label-unit"></span>
+        <span id="label-number"></span>
+      </div>
+
+<!--         <span id="label-commodity"></span> |
         <span id="label-stat"></span> |
         <span id="label-number"></span> |
         <span id="label-unit"></span> |
         <span id="label-region"></span> |
         <span id="label-year"></span>
-      </div>
+      </div> -->
       <div class="timeseries">
       </div>
 
     </div>
     <div class="sideicons">
     <div class="section">
-      <div class="icon icon-list-view"></div>
+      <div class="icon icon-list-view" data-toggle="tooltip" data-placement="left" title="List View"></div>
     </div>
     <div class="section">
-      <div class="icon icon-planted"></div>
-      <div class="icon icon-harvested"></div>
-      <div class="icon icon-yield active"></div>
-      <div class="icon icon-production"></div>
+      <div class="icon icon-planted" data-toggle="tooltip" data-placement="left" title="Planted"></div>
+      <div class="icon icon-harvested" data-toggle="tooltip" data-placement="left" title="Harvested"></div>
+      <div class="icon icon-yield active" data-toggle="tooltip" data-placement="left" title="Yield"></div>
+      <div class="icon icon-production" data-toggle="tooltip" data-placement="left" title="Production"></div>
     </div>
     <div class="section">
       <div class="icon icon-legend"></div>
+    </div> 
     </div>
     </div>
   </div>
@@ -195,5 +207,6 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>  -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>  -->
 <script src="js/app.js"></script>
+<script src="js/bootstrap.min.js"></script>
 
 </html>

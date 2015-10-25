@@ -310,7 +310,7 @@
     uiState.state = stateID;
     updateTimeseries();
     if (!uiState.state) {
-      labels.region.html('National');
+      labels.region.html('United States');
     } else {
       labels.region.html(stateNames[stateID]);
     }
@@ -336,7 +336,7 @@
   }
 
   function updateNumberLabel() {
-    labels.number.html('stat_here');
+    labels.number.html(data[uiState.year][uiState.county]);
   }
 
   function updateData() {
@@ -449,12 +449,28 @@
     params.classList.add("expanded");
   }
 
-  window.onload = function()
-  {
+  window.onload = function(){
     document.getElementById("crops").onclick = function() {changeClass(this)};
     document.getElementById("fruitTreeNuts").onclick = function() {changeClass(this)};
     document.getElementById("vegetables").onclick = function() {changeClass(this)};
   }
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    $('.icon-legend').tooltip({
+      html: true,
+      placement: "left",
+      title:
+      '<div class="title">Bushels per acre</div>' +
+      '<div><span class="concentration level1"></span><span>Not estimated</span></div>' +
+      '<div><span class="concentration level2"></span><span>< 50</span></div>' +
+      '<div><span class="concentration level3"></span><span>50 - 59.9</span></div>' +
+      '<div><span class="concentration level4"></span><span>60 - 69.9</span></div>' +
+      '<div><span class="concentration level5"></span><span>70 - 79.9</span></div>' +
+      '<div><span class="concentration level6"></span><span>80 - 89.9</span></div>' +
+      '<div><span class="concentration level7"></span><span>90 +</span></div>'
+      });
+  })
 
   initMap();
   initTimeseries();

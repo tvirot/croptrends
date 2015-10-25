@@ -2,7 +2,7 @@ body {
   background-color: #efefef;
   color: #333;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 300;
   margin: 0 auto;
   padding: 10px 20px 0 20px;
@@ -419,4 +419,87 @@ p.clear {
   background-repeat: no-repeat;
   margin-bottom: -3px;
   display: inline-block;
+}
+
+.icon + .tooltip {
+    position: absolute;
+}
+
+.icon + .tooltip > .tooltip-inner {
+    background-color: #333; 
+    color: #fff; 
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.icon + .tooltip > .tooltip-inner .title {
+    padding-bottom: 10px;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.concentration {
+  height: 14px;
+  width: 14px;
+  float: left;
+  margin: 2px 10px 0 0;
+}
+
+.concentration.level1 {
+  background-color: #f0f9e8;
+}
+
+.concentration.level2 {
+  background-color: #ccebc5;
+}
+
+.concentration.level3 {
+  background-color: #a8ddb5;
+}
+
+.concentration.level4 {
+  background-color: #7bccc4;
+}
+
+.concentration.level5 {
+  background-color: #4eb3d3;
+}
+
+.concentration.level6 {
+  background-color: #2b8cbe;
+}
+
+.concentration.level7 {
+  background-color: #08589e;
+}
+
+#label-stat {
+  float: right;
+  /*text-transform: uppercase;*/
+}
+
+#label-number {
+  margin-right: 5px;
+  float: right;
+}
+
+#label-unit {
+  float: right;
+}
+
+#label-region {
+  float: left;
+}
+
+#label-year {
+  float: left;
+}
+
+.label {
+  padding: 0 19px 0 50px;
+  font-size: 14px;
+  font-weight: 300;
+  color: #666;
 }
