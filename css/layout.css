@@ -278,8 +278,9 @@ p.clear {
 
 .main .listview {
   background: #efefef;
-  height: 332px;
+  height: 370px;
   left: 0;
+  margin-left: 36px;
   padding: 20px;
   position: absolute;
   top: 0;
@@ -291,7 +292,7 @@ p.clear {
   border-top: 4px solid #efefef;
   border-bottom: 4px solid #efefef;
   box-shadow: 0 -1px 0 #ccc, 0 1px 0 #ccc;
-  height: 320px;
+  height: 310px;
   overflow: scroll;
 }
 
@@ -303,9 +304,8 @@ p.clear {
 }
 
 .listview table {
-  width: 100%;
-/*  margin: 20px auto;*/
-  padding-left: 20px;
+  width: 90%;
+  margin: 0 auto;
   border-collapse: collapse;
 }
 
@@ -314,10 +314,13 @@ p.clear {
   height: 2em;
 }
 
-.listview tbody tr *:nth-child(3) {
+.listview tr *:nth-child(3) {
   text-align: right;
 }
 
+.listview tr *:nth-child(2) {
+  text-align: left;
+}
 
 #tooltip-state {
   font-weight: bold;
@@ -809,6 +812,3 @@ em {
   text-align: right;
   width: 30%;
 }
-
-.bar-column {
-  text-align: left;
