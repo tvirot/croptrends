@@ -281,7 +281,6 @@ p.clear {
   height: 372px;
   left: 0;
   position: absolute;
-  text-align: center;
   top: 0;
   width: 100%;
   overflow: scroll;
@@ -808,13 +807,13 @@ em {
   text-align: left;
 
 * {
-     -webkit-box-sizing:content-box;
-    -moz-box-sizing: content-box;
-     box-sizing:content-box
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box
 }
 
 *:before,*:after {
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box
 }
