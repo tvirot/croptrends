@@ -280,22 +280,22 @@ p.clear {
   background: #efefef;
   height: 372px;
   left: 0;
+  padding: 20px;
   position: absolute;
   top: 0;
   width: 100%;
+  text-align: center;
+}
+
+.listview .table-div {
   overflow: scroll;
 }
 
 .listview table {
-  width: 85%;
-  margin: 20px auto;
+  width: 100%;
+/*  margin: 20px auto;*/
   padding-left: 20px;
   border-collapse: collapse;
-}
-
-.listview th {
-  padding: 12px 8px;
-  border-bottom: 1px solid #dbdbdb;
 }
 
 .listview td {
@@ -305,10 +305,6 @@ p.clear {
 
 .listview tbody tr *:nth-child(3) {
   text-align: right;
-}
-
-.listview tbody tr:first-child td{
-  padding-top: 12px;
 }
 
 

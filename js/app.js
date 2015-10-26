@@ -25,7 +25,7 @@
       tooltipContent = tooltip.select("#tooltip-content");
   var tooltipOffset = [0][0];
   var loading;
-  var modeIcon;
+  var listview, listviewTable;
   var labels = {};
 
 
@@ -43,6 +43,7 @@
     .range(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);
   var thousandComma = d3.format('0,000');
   var threePrecision = d3.format('3g');
+  var twoDecimal = d3.format('.2f');
 
   // State variables
   var isMapReady = false; // Don't bind any data unless the map data is loaded.
@@ -96,14 +97,18 @@
           elem.classed("icon-list-view", false)
             .classed("icon-map-view", true)
             .attr("data-original-title", "Map View");
-          // show list
+          showList();
         } else {
           elem.classed("icon-list-view", true)
             .classed("icon-map-view", false)
             .attr("data-original-title", "List View");
+          hideList();
         }
         $('.icon.mode').tooltip('show');
       })
+
+    listview = d3.select(".listview");
+    listviewTable = listview.select(".table-div table");
 
     labels.commodity = d3.select("#label-commodity");
     labels.stat = d3.select("#label-stat");
@@ -635,6 +640,72 @@
         .attr("cx", x(uiState.year))
         .attr("cy", y(dat.data[uiState.year]));
     }
+  }
+
+  function showList() {
+    listview.classed("hidden_elem", false);
+    listview.select("#table-stat")
+      .html(statStrs[dataSelection.stat]);
+    listview.select("#table-region")
+      .html((uiState.mode === 'NATIONAL') ? "State" : "County");
+    listview.select("#table-unit")
+      .html(summary.metadata.unit.toLowerCase());
+
+    updateList();
+  }
+
+  function hideList() {
+    listview.classed("hidden_elem", true);
+  }
+
+  function updateList() {
+    var dat = [];
+    if (uiState.mode === "NATIONAL") {
+      Object.keys(summary.state).forEach(function(stateID) {
+        if (summary.state[stateID].data.hasOwnProperty(uiState.year)) {
+          dat.push({
+            name: summary.state[stateID].name,
+            value: summary.state[stateID].data[uiState.year],
+            pct: summary.state[stateID].data[uiState.year] /
+              summary.national.data[uiState.year] * 100.0
+          });
+        }
+      });
+    } else if (uiState.mode === "STATE") {
+      Object.keys(summary.county).forEach(function(countyID) {
+        var stateID = countyID.slice(0,-3);
+        if (stateID == uiState.state &&
+          summary.county[countyID].data.hasOwnProperty(uiState.year)) {
+          dat.push({
+            name: summary.county[countyID].name,
+            value: summary.county[countyID].data[uiState.year],
+            pct: summary.county[countyID].data[uiState.year] /
+              summary.state[stateID].data[uiState.year] * 100.0
+          });
+        }
+      });
+    }
+
+    dat.sort(function(a,b) {
+      return (a.value < b.value) ? 1 :
+        ((b.value < a.value) ? -1 : 0);
+    });
+
+    listviewTable.selectAll("*").remove();
+    listviewTable.selectAll("tr")
+      .data(dat).enter()
+        .append("tr")
+      .html(function(d, i) {
+        var rank = '<td>' + (i + 1) + "</td>";
+        var name = '<td>' + d.name + "</td>";
+        var value = '<td>' + thousandComma(d.value) + "</td>";
+        var share = '<td class="bar-column">' +
+          '<div class="percent">' + twoDecimal(d.pct) + '%</div>' +
+          '<div class="percent-bar">' +
+          '<div class="percent-fill" style="width: ' + twoDecimal(d.pct) + '%"></div>' +
+          '</div></td>';
+        return rank + name + value + share;
+      });
   }
 
   function getCommodityLabel(d) {
