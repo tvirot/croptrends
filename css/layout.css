@@ -278,17 +278,28 @@ p.clear {
 
 .main .listview {
   background: #efefef;
-  height: 372px;
+  height: 332px;
   left: 0;
   padding: 20px;
   position: absolute;
   top: 0;
-  width: 100%;
+  width: 670px;
   text-align: center;
 }
 
 .listview .table-div {
+  border-top: 4px solid #efefef;
+  border-bottom: 4px solid #efefef;
+  box-shadow: 0 -1px 0 #ccc, 0 1px 0 #ccc;
+  height: 320px;
   overflow: scroll;
+}
+
+.listview .header {
+  padding-bottom: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
 }
 
 .listview table {

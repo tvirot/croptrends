@@ -43,7 +43,7 @@
     .range(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);
   var thousandComma = d3.format('0,000');
   var threePrecision = d3.format('3g');
-  var twoDecimal = d3.format('.2f');
+  var oneDecimal = d3.format('.1f');
 
   // State variables
   var isMapReady = false; // Don't bind any data unless the map data is loaded.
@@ -700,9 +700,9 @@
         var name = '<td>' + d.name + "</td>";
         var value = '<td>' + thousandComma(d.value) + "</td>";
         var share = '<td class="bar-column">' +
-          '<div class="percent">' + twoDecimal(d.pct) + '%</div>' +
+          '<div class="percent">' + oneDecimal(d.pct) + '%</div>' +
           '<div class="percent-bar">' +
-          '<div class="percent-fill" style="width: ' + twoDecimal(d.pct) + '%"></div>' +
+          '<div class="percent-fill" style="width: ' + oneDecimal(d.pct) + '%"></div>' +
           '</div></td>';
         return rank + name + value + share;
       });
