@@ -40,6 +40,7 @@
   var color = d3.scale.threshold()
     .range(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e"]);
   var thousandComma = d3.format('0,000');
+  var threePrecision = d3.format('3g');
 
   // State variables
   var isMapReady = false; // Don't bind any data unless the map data is loaded.
@@ -462,12 +463,18 @@
       return;
     }
 
-    loading.select("spinner").classed("hidden_elem", false);
-    loading.select("error").classed("hidden_elem", true);
+    loading.select(".spinner").classed("hidden_elem", false);
+    loading.select(".error").classed("hidden_elem", true);
     loading.classed("hidden_elem", false);
 
-    var filename = "dat/nass/" + dataSelection.commodity + "-" +
-      dataSelection.stat + ".json";
+    var filename;
+    if (document.location.hostname == "localhost") {
+      filename = "dat/nass/" + dataSelection.commodity + "-" +
+        dataSelection.stat + ".json";
+    } else {
+      filename = "dat/nass-gz/" + dataSelection.commodity + "-" +
+        dataSelection.stat + ".json";
+    }
 
     d3.json(filename, function(err, json) {
       if (err) throw err;
@@ -504,34 +511,43 @@
         .call(brush.extent([uiState.year, uiState.year]))
         .call(brush.event);
 
+      var legendLabels = summary.metadata.colorQuantiles.map(function(d){
+        if (Math.abs(Math.round(d) - d) > 1e-4) {
+          return threePrecision(d);
+        } else {
+          return thousandComma(Math.round(d));
+        }
+      });
+
       $('.icon-legend').tooltip('destroy');
       $('.icon-legend').tooltip({
         html: true,
         placement: "left",
         title:
-        '<div><span class="concentration level0"></span>Not estimated </div>' +
-        '<div><span class="concentration level1"></span>< ' +
-          thousandComma(Math.round(summary.metadata.colorQuantiles[0])) +
-        '</div>' +
-        '<div><span class="concentration level2"></span>' +
-          thousandComma(Math.round(summary.metadata.colorQuantiles[0])) +
-          ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[1]) - 1) +
-        '</div>' +
-        '<div><span class="concentration level3"></span>' +
-          thousandComma(Math.round(summary.metadata.colorQuantiles[1])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[2]) - 1) +
-        '</div>' +
-        '<div><span class="concentration level4"></span>' +
-          thousandComma(Math.round(summary.metadata.colorQuantiles[2])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[3]) - 1) +
-        '</div>' +
-        '<div><span class="concentration level5"></span>' +
-          thousandComma(Math.round(summary.metadata.colorQuantiles[3])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[4]) - 1) +
-        '</div>' +
-        '<div><span class="concentration level6"></span>' +
-          thousandComma(Math.round(summary.metadata.colorQuantiles[4])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[5]) - 1) +
-        '</div>' +
-        '<div><span class="concentration level6"></span>> ' +
-          thousandComma(Math.round(summary.metadata.colorQuantiles[5])) +
-        '</div>' +
+        '<div><div class="concentration level0"></div><div class="legend-label">' +
+          'Not estimated' +
+        '</div></div>' +
+        '<div class="valign-middle"><div class="concentration level1"></div><div class="legend-label">< ' +
+          legendLabels[0] +
+        '</div></div>' +
+        '<div class="valign-middle"><div class="concentration level2"></div><div class="legend-label">' +
+          legendLabels[0] + ' - ' + legendLabels[1] +
+        '</div></div>' +
+        '<div><div class="concentration level3"></div><div class="legend-label">' +
+          legendLabels[1] + ' - ' + legendLabels[2] +
+        '</div></div>' +
+        '<div><div class="concentration level4"></div><div class="legend-label">' +
+          legendLabels[2] + ' - ' + legendLabels[3] +
+        '</div></div>' +
+        '<div><div class="concentration level5"></div><div class="legend-label">' +
+          legendLabels[3] + ' - ' + legendLabels[4] +
+        '</div></div>' +
+        '<div><div class="concentration level6"></div><div class="legend-label">' +
+          legendLabels[4] + ' - ' + legendLabels[5] +
+        '</div></div>' +
+        '<div><div class="concentration level7"></div><div class="legend-label">&#8805; ' +
+          legendLabels[5] +
+        '</div></div>' +
         '<div class="title">(' + summary.metadata.unit.toLowerCase() + ')</div>'
       });
 

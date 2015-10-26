@@ -6,7 +6,7 @@ var commodities = [
   'cotton-pima', 'cotton-upland', 'flaxseed', 'hay-alfalfa',
   'hay-others', 'oats', 'peanuts', 'rice', 'sorghum' ,
   'soybeans', 'sugarbeets', 'sugarcane', 'sunflower-non-oil',
-  'sunflower-oil', 'sweet-potatoes', 'tobacco-burley', 'tobacco-flue-cured',
+  'sunflower-oil', 'sweet_potatoes', 'tobacco-burley', 'tobacco-flue-cured',
   'wheat-durum', 'wheat-spring', 'wheat-winter'
 ];
 var stats = ['planted', 'harvested', 'yield', 'production'];
@@ -15,7 +15,6 @@ var noPlanted = [
   'tobacco-flue-cured',
   ]
 
-// var c = commodities[23];
 for (var j in commodities) {
   var c =  commodities[j];
   for (var i in stats) {
@@ -104,10 +103,20 @@ for (var j in commodities) {
       .domain(values)
       .range([1, 2, 3, 4, 5, 6, 7])
       .quantiles();
-    summary.metadata.colorQuantiles = quantiles.map(prettifyNumber);
+    var colorQuantiles =
+      quantiles.map(function(d) { return prettifyNumber(d, 4); });
+
+    var isDuplicated = colorQuantiles.reduce(function(d0, d1, i) {
+      return d0 && (d1 != colorQuantiles[i - i]);
+    })
+
+    summary.metadata.colorQuantiles = (!isDuplicated) ?
+      colorQuantiles :
+      quantiles.map(function(d) { return prettifyNumber(d, 8); });
 
     // console.log(summary.county['30105'].name)
     // console.log(summary.metadata.yearRange);
+    // console.log(quantiles);
     // console.log(summary.metadata.colorQuantiles);
 
     // == STATE ==
@@ -213,19 +222,18 @@ for (var j in commodities) {
       }
     });
 
-    fs.writeFileSync("../dat/nass-full/" + key + ".json",
+    fs.writeFileSync("../dat/nass/" + key + ".json",
       JSON.stringify(summary)
     );
   }
 }
 
-function prettifyNumber(n) {
-  var log = Math.floor(Math.log10(n));
-  var fraction = (log > 1) ? 4 : 1;
-
-  return Math.round(n * fraction * Math.pow(10, -log)) /
+function prettifyNumber(n, fraction) {
+  var log = Math.floor(Math.log10(n * 1000));
+  return Math.round(n * 1000 * fraction * Math.pow(10, -log)) /
     fraction /
-    Math.pow(10, -log);
+    Math.pow(10, -log) /
+    1000;
 }
 
 function capitalize(str) {
