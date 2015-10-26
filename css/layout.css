@@ -319,6 +319,7 @@ p.clear {
   background-image: url("/icons/list-view-hover.svg");
 }
 
+.icon-list-view.active,
 .icon-list-view:active {
   background-image: url("/icons/list-view-active.svg");
 }
@@ -333,6 +334,7 @@ p.clear {
   background-image: url("/icons/map-view-hover.svg");
 }
 
+.icon-map-view.active,
 .icon-map-view:active {
   background-image: url("/icons/map-view-active.svg");
 }
@@ -346,7 +348,8 @@ p.clear {
   background-image: url("/icons/planted-hover.svg");
 }
 
-.icon-planted:active {
+.icon-planted:active,
+.icon-planted.active {
   background-image: url("/icons/planted-active.svg");
 }
 
@@ -359,7 +362,8 @@ p.clear {
   background-image: url("/icons/harvested-hover.svg");
 }
 
-.icon-harvested:active {
+.icon-harvested:active,
+.icon-harvested.active {
   background-image: url("/icons/harvested-active.svg");
 }
 
@@ -386,7 +390,8 @@ p.clear {
   background-image: url("/icons/production-hover.svg");
 }
 
-.icon-production:active {
+.icon-production:active,
+.icon-production.active {
   background-image: url("/icons/production-active.svg");
 }
 

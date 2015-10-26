@@ -77,7 +77,11 @@
 
     var statIcons = d3.selectAll(".icon.stat")
       .on("click", function(d) {
-        dataSelection.stat = d3.select(this).attr("id");
+        var elem = d3.select(this);
+        d3.selectAll(".icon.stat")
+          .classed("active", false);
+        elem.classed("active", true);
+        dataSelection.stat = elem.attr("id");
         updateData();
       });
 
