@@ -438,7 +438,7 @@ p.clear {
   padding: 10px;
   font-size: 12px;
   border-radius: 3px;
-  margin-right: 16px;
+  margin-right: 12px;
 }
 
 .icon + .tooltip > .tooltip-inner .title {
