@@ -49,9 +49,9 @@ h4 {
 
 .header .info {
   display: inline-block;
-  font-size: 13px;
+/*  font-size: 13px;
   font-weight: 400;
-  color: #999;
+  color: #999;*/
   float: right;
   margin-top: 18px;
 }
@@ -100,7 +100,7 @@ h4 {
   width: calc(25% - 24px);*/
   width: 155px;
   float: left;
-  border-bottom: 1px solid #ccc;
+  /*border-bottom: 1px solid #ccc;*/
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 3px;
 }
@@ -136,6 +136,7 @@ h4 {
 .collaspible-menu.expanded .group .title {
   font-weight: 400;
   color: #666;
+  /*letter-spacing: 1px;*/
 }
 
 .collaspible-menu .group .glyphicon {
@@ -197,6 +198,7 @@ h4 {
 .collaspible-menu .commodity .active:hover {
   color: #fff;
   background-color: #0ac775;
+  font-weight: 400;
 }
 
 
@@ -205,7 +207,7 @@ h4 {
   /*width: 74%;*/
   /*width: calc(100% - 175px);*/
   position: relative;
-  width: 725px;
+  width: 715px;
   float: left;
 }
 
@@ -287,7 +289,7 @@ p.clear {
 }
 
 .sideicons {
-  width: 40px;
+  width: 50px;
   float: left;
   padding-left: 20px;
 }
@@ -302,9 +304,9 @@ p.clear {
 }
 
 .icon {
-  height: 40px;
-  width: 40px;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+  height: 50px;
+  width: 50px;
+  /*box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);*/
   border-radius: 50%;
   /*background-color: #fff;*/
   margin-bottom: 15px;
@@ -401,6 +403,7 @@ p.clear {
 .icon-legend {
   background-image: url("/icons/legend.svg");
   background-repeat: no-repeat;
+  cursor: default;
 }
 
 .icon-legend:hover {
@@ -638,6 +641,11 @@ h6 {
   font-weight: 100;
 }
 
+.btn {
+  padding: 10px 25px;
+  transition-duration: 0.1s;
+}
+
 .btn-default {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.5);
@@ -653,9 +661,27 @@ h6 {
   border: 0;
 }
 
-.btn {
-  padding: 10px 25px;
+.btn-about {
+  color: #666;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 0;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  float: right;
+  margin-top: 18px;
+  display: inline-block;
+  /*text-transform: uppercase;*/
+  padding: 8px 20px;
 }
+
+.btn-about:hover {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 0;
+}
+
+
 .loading {
   background: #EFEFEF;
   height: 100%;
@@ -709,4 +735,16 @@ h6 {
 em {
   font-size: 16px;
   font-style: normal;
+}
+
+* {
+     -webkit-box-sizing:content-box; 
+    -moz-box-sizing: content-box;
+     box-sizing:content-box
+}
+
+*:before,*:after {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box
 }
