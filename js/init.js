@@ -9,9 +9,8 @@ function init(){
 
 function changeCoverHeight(){
     var $cover = $('.landing');
-    var wh = window.innerHeight;
-    
-    $cover.css('height',wh);
+    var height = window.innerHeight;
+    $cover.css('height',height);
 };
 
 $(window).resize(function(){
