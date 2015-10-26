@@ -30,7 +30,7 @@
 
 
   // Viz elements
-  var width = 725;
+  var width = 715;
   var height = 380;
   var mapMargin = {top: 10, right: 10, bottom: 10, left: 10}
 
