@@ -277,13 +277,40 @@ p.clear {
 }
 
 .main .listview {
-  background: rgba(0,0,0,0.4);
+  background: #efefef;
+  height: 372px;
+  left: 0;
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 372px;
+  overflow: scroll;
 }
+
+.listview table {
+  width: 85%;
+  margin: 20px auto;
+  padding-left: 20px;
+  border-collapse: collapse;
+}
+
+.listview th {
+  padding: 12px 8px;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.listview td {
+  padding: 0 8px;
+  height: 2em;
+}
+
+.listview tbody tr *:nth-child(3) {
+  text-align: right;
+}
+
+.listview tbody tr:first-child td{
+  padding-top: 12px;
+}
+
 
 #tooltip-state {
   font-weight: bold;
@@ -755,14 +782,38 @@ em {
   font-style: normal;
 }
 
+.percent-bar {
+  background: rgba(78, 179, 211, 0.4);
+  display: inline-block;
+  height: 10px;
+  position: relative;
+  width: 140px;
+}
+
+.percent-fill {
+  background: #4eb3d3;
+  position: absolute;
+  height: 100%;
+}
+
+.percent {
+  display: inline-block;
+  padding-right: 16px;
+  text-align: right;
+  width: 30%;
+}
+
+.bar-column {
+  text-align: left;
+
 * {
-     -webkit-box-sizing:content-box; 
-    -moz-box-sizing: content-box;
-     box-sizing:content-box
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box
 }
 
 *:before,*:after {
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box
 }

@@ -25,7 +25,9 @@
       tooltipContent = tooltip.select("#tooltip-content");
   var tooltipOffset = [0][0];
   var loading;
+  var modeIcon;
   var labels = {};
+
 
   // Viz elements
   var width = 710;
@@ -85,6 +87,23 @@
         dataSelection.stat = elem.attr("id");
         updateData();
       });
+
+    var modeIcon = d3.select(".icon.mode")
+      .on("click", function(d) {
+        $('.icon.mode').tooltip('hide');
+        var elem = d3.select(this);
+        if (elem.classed("icon-list-view")) {
+          elem.classed("icon-list-view", false)
+            .classed("icon-map-view", true)
+            .attr("data-original-title", "Map View");
+          // show list
+        } else {
+          elem.classed("icon-list-view", true)
+            .classed("icon-map-view", false)
+            .attr("data-original-title", "List View");
+        }
+        $('.icon.mode').tooltip('show');
+      })
 
     labels.commodity = d3.select("#label-commodity");
     labels.stat = d3.select("#label-stat");
