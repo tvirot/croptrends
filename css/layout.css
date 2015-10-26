@@ -157,9 +157,9 @@ h4 {
 
 .collaspible-menu .commodity {
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
   color: #666;
-  padding: 10px 0;
+  padding: 4px 0;
   height: auto;
   overflow: scroll;
   text-align: left;
@@ -176,10 +176,14 @@ h4 {
 }
 
 .collaspible-menu .commodity li {
-  padding: 0 20px;
+  padding: 0.5px 20px;
   cursor: pointer;
   line-height: 20px;
   transition-duration: 0.05s;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .collaspible-menu .commodity li:hover {
@@ -197,6 +201,7 @@ h4 {
   /*display: inline-block;*/
   /*width: 74%;*/
   /*width: calc(100% - 175px);*/
+  position: relative;
   width: 725px;
   float: left;
 }
@@ -301,6 +306,7 @@ p.clear {
   /*background-color: #fff;*/
   margin-bottom: 15px;
   transition-duration: 0.1s;
+  cursor: pointer;
 }
 
 .icon-list-view {
@@ -403,29 +409,35 @@ p.clear {
 }
 
 .icon + .tooltip {
-    position: absolute;
+  position: absolute;
 }
 
 .icon + .tooltip > .tooltip-inner {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    font-size: 12px;
-    border-radius: 3px;
-    margin-right: 10px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 3px;
+  margin-right: 16px;
 }
 
 .icon + .tooltip > .tooltip-inner .title {
-    padding-bottom: 10px;
-    font-size: 13px;
-    font-weight: 400;
+  padding-top: 4px;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 300;
+  text-align: center;
 }
 
 .concentration {
   height: 14px;
   width: 14px;
-  float: left;
-  margin: 2px 10px 0 0;
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+
+.concentration.level0 {
+  background-color: #fff;
 }
 
 .concentration.level1 {
@@ -456,6 +468,10 @@ p.clear {
   background-color: #08589e;
 }
 
+.icon-legend div {
+  display: block;
+}
+
 #label-stat {
   float: right;
   /*text-transform: uppercase;*/
@@ -481,8 +497,13 @@ p.clear {
 .label {
   padding: 0 19px 0 50px;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   color: #666;
+}
+
+.label.bottom {
+  font-size: 16px;
+  font-weight: 300;
 }
 
 .landing {
@@ -604,4 +625,59 @@ h6 {
 .col p {
   font-size: 20px;
   font-weight: 100;
+}
+
+.loading {
+  background: #EFEFEF;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+}
+
+@-webkit-keyframes spinner {
+    to {-webkit-transform: rotate(360deg);}
+}
+
+.spinner {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.spinner:before {
+  content: 'Loading…';
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  margin-left: -18px;
+}
+
+.spinner:not(:required):before {
+  content: '';
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #4EB3D3;
+  animation: spinner .6s linear infinite;
+  -webkit-animation: spinner .6s linear infinite;
+}
+
+.loading .error {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  text-align: center;
+  width: 100%;
+}
+
+em {
+  font-size: 16px;
+  font-style: normal;
 }

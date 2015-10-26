@@ -24,7 +24,8 @@
       tooltipState = tooltip.select("#tooltip-state"),
       tooltipContent = tooltip.select("#tooltip-content");
   var tooltipOffset = [0][0];
-  var labels = [];
+  var loading;
+  var labels = {};
 
   // Viz elements
   var width = 725;
@@ -45,6 +46,7 @@
   var isDataReady = false;
 
   var dataSelection = {
+    // default
     commodity: "barley",
     stat: "planted"
   };
@@ -65,21 +67,28 @@
       .enter()
         .append("li")
       .classed("active", function(d,i) { return i == 0; })
-      .html(function(d) {
-        d = d.replace(/_/g, " ");
-        var breakpoint = d.indexOf('-');
-        if (breakpoint > -1) {
-          return capitalize(d.substr(0, breakpoint)) + " (" +
-            d.substr(breakpoint+1) + ")";
-        }
-        return capitalize(d);
-      })
+      .html(getCommodityLabel)
       .on("click", function(d) {
         dataSelection.commodity = d;
         menu.select("li.active").classed("active", false);
         d3.select(this).classed("active", true);
         updateData();
       });
+
+    var statIcons = d3.selectAll(".icon.stat")
+      .on("click", function(d) {
+        dataSelection.stat = d3.select(this).attr("id");
+        updateData();
+      });
+
+    labels.commodity = d3.select("#label-commodity");
+    labels.stat = d3.select("#label-stat");
+    labels.number = d3.select("#label-number");
+    labels.unit = d3.select("#label-unit");
+    labels.region = d3.select("#label-region");
+    labels.year = d3.select("#label-year");
+
+    loading = d3.select(".loading");
   }
 
   function initMap() {
@@ -125,7 +134,9 @@
         .attr("d", path)
         .on("mouseout", function() {
           highlight.selectAll('*').remove();
-          changeCounty(undefined)
+          if (uiState.mode === 'STATE') {
+            changeCounty(undefined);
+          }
         })
         .on("mouseover", function(d) {
           if (!summary.county.hasOwnProperty(d.id)) {
@@ -175,6 +186,7 @@
           changeState(d.id);
         })
         .on("click", function(d) {
+          d3.event.stopPropagation();
           if (!summary.state.hasOwnProperty(d.id)) {
             return;
           }
@@ -186,13 +198,6 @@
   }
 
   function initTimeseries() {
-    labels.commodity = d3.select("#label-commodity");
-    labels.stat = d3.select("#label-stat");
-    labels.number = d3.select("#label-number");
-    labels.unit = d3.select("#label-unit");
-    labels.region = d3.select("#label-region");
-    labels.year = d3.select("#label-year");
-
     var timeseriesDiv = d3.select(".timeseries");
     var margin = {top: 10, right: 20, left: 50},
       width_ = width - margin.left - margin.right;
@@ -213,7 +218,7 @@
 
     miniSVG = timeseriesDiv.append("svg")
       .attr("width", width)
-      .attr("height", 160)
+      .attr("height", 140)
         .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -411,7 +416,6 @@
     } else if (uiState.mode == 'STATE') {
       uiState.mode = 'NATIONAL';
     }
-    updateNumberLabel()
   }
 
   function updateNumberLabel() {
@@ -431,7 +435,7 @@
     }
 
     if (value === undefined) {
-      labels.number.html("-");
+      labels.number.html("n/a");
       labels.unit.html("");
     } else {
       labels.number.html(thousandComma(value));
@@ -442,7 +446,21 @@
   function updateData() {
     isDataReady = false;
 
-    // Load spinner
+    if (dataSelection.stat === 'planted' &&
+      noPlanted.indexOf(dataSelection.commodity) > -1) {
+      loading.select(".spinner").classed("hidden_elem", true);
+      loading.select(".error")
+        .html("<em>" + statStrs[dataSelection.stat] + " data are not " +
+          "available for " + getCommodityLabel(dataSelection.commodity) + "." +
+          "</em><br/> Try other commodities or select other available stats.")
+        .classed("hidden_elem", false);
+      loading.classed("hidden_elem", false);
+      return;
+    }
+
+    loading.select("spinner").classed("hidden_elem", false);
+    loading.select("error").classed("hidden_elem", true);
+    loading.classed("hidden_elem", false);
 
     var filename = "dat/nass/" + dataSelection.commodity + "-" +
       dataSelection.stat + ".json";
@@ -463,7 +481,13 @@
       labels.stat.html(statStrs[dataSelection.stat]);
       labels.unit.html(summary.metadata.unit.toLowerCase());
 
-      changeState(uiState.state);
+      if (uiState.mode === 'STATE' &&
+        !summary.state.hasOwnProperty(uiState.state)) {
+        resetZoom();
+      } else {
+        changeState(uiState.state);
+      }
+
       if (uiState.year &&
           uiState.year <= summary.metadata.yearRange[1] &&
           uiState.year >= summary.metadata.yearRange[0]) {
@@ -476,22 +500,35 @@
         .call(brush.extent([uiState.year, uiState.year]))
         .call(brush.event);
 
+      $('.icon-legend').tooltip('destroy');
       $('.icon-legend').tooltip({
         html: true,
         placement: "left",
         title:
-        '<div class="title">' + summary.metadata.unit.toLowerCase() + '</div>' +
-        '<div><span class="concentration level1"></span><span>Not estimated</span></div>' +
-        '<div><span class="concentration level2"></span><span>< ' +
-          summary.metadata.colorQuantiles[0] +
-        '</span></div>' +
-        '<div><span class="concentration level3"></span><span>' +
-          thousandComma(summary.metadata.colorQuantiles[0]) + '-' + thousandComma(summary.metadata.colorQuantiles[0] - 1) +
-        '</span></div>' +
-        '<div><span class="concentration level4"></span><span>60 - 69.9</span></div>' +
-        '<div><span class="concentration level5"></span><span>70 - 79.9</span></div>' +
-        '<div><span class="concentration level6"></span><span>80 - 89.9</span></div>' +
-        '<div><span class="concentration level7"></span><span>90 +</span></div>'
+        '<div><span class="concentration level0"></span>Not estimated </div>' +
+        '<div><span class="concentration level1"></span>< ' +
+          thousandComma(Math.round(summary.metadata.colorQuantiles[0])) +
+        '</div>' +
+        '<div><span class="concentration level2"></span>' +
+          thousandComma(Math.round(summary.metadata.colorQuantiles[0])) +
+          ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[1]) - 1) +
+        '</div>' +
+        '<div><span class="concentration level3"></span>' +
+          thousandComma(Math.round(summary.metadata.colorQuantiles[1])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[2]) - 1) +
+        '</div>' +
+        '<div><span class="concentration level4"></span>' +
+          thousandComma(Math.round(summary.metadata.colorQuantiles[2])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[3]) - 1) +
+        '</div>' +
+        '<div><span class="concentration level5"></span>' +
+          thousandComma(Math.round(summary.metadata.colorQuantiles[3])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[4]) - 1) +
+        '</div>' +
+        '<div><span class="concentration level6"></span>' +
+          thousandComma(Math.round(summary.metadata.colorQuantiles[4])) + ' - ' + thousandComma(Math.round(summary.metadata.colorQuantiles[5]) - 1) +
+        '</div>' +
+        '<div><span class="concentration level6"></span>> ' +
+          thousandComma(Math.round(summary.metadata.colorQuantiles[5])) +
+        '</div>' +
+        '<div class="title">(' + summary.metadata.unit.toLowerCase() + ')</div>'
       });
 
       isDataReady = true;
@@ -499,6 +536,8 @@
       updateMap();
       updateTimeseries();
       updateNumberLabel();
+
+      loading.classed("hidden_elem", true);
     });
   }
 
@@ -533,6 +572,8 @@
       }
     }
 
+    if (dat === undefined) return;
+
     var lineData = Object.keys(dat.data)
       .map(function(d) {
         return {x: +d, y: dat.data[d]};
@@ -548,18 +589,23 @@
       .attr("d", line(lineData));
 
     timeseries.selectAll(".point").remove()
-    timeseries.selectAll(".point")
-      .data(lineData).enter()
-        .append("circle")
-      .attr("class", "point")
-      .classed("selected", function(d) { return d.x == uiState.year; })
-      .attr("r", function(d) {
-        if (summary.metadata.yearRange[1] -
-          summary.metadata.yearRange[0] < 30) return 4;
-        return 3;
-      })
-      .attr("cx", function(d) { return x(d.x); })
-      .attr("cy", function(d) { return y(d.y); });
+    if (dat.data.hasOwnProperty(uiState.year)) {
+      timeseries.append("circle")
+        .attr("class", "point selected")
+        .attr("r", 4)
+        .attr("cx", x(uiState.year))
+        .attr("cy", y(dat.data[uiState.year]));
+    }
+  }
+
+  function getCommodityLabel(d) {
+    d = d.replace(/_/g, " ");
+    var breakpoint = d.indexOf('-');
+    if (breakpoint > -1) {
+      return capitalize(d.substr(0, breakpoint)) + " (" +
+        capitalize(d.substr(breakpoint+1)) + ")";
+    }
+    return capitalize(d);
   }
 
   function capitalize(str) {

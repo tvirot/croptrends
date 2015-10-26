@@ -43,7 +43,6 @@
     </div>
 
     <div class="main">
-
       <div class="viz">
         <div class="map">
         </div>
@@ -55,30 +54,36 @@
         </div>
       </div>
 
-      <div class="label">
-        <span id="label-region">California</span>
-        <span id="label-stat">Yield</span>
+      <div class="label top">
+        <span id="label-region"></span>
+        <span id="label-stat"></span>
       </div>
       <p class="clear"></p>
-      <div class="label">
-        <span id="label-year">1990</span>
-        <span id="label-unit">BU</span>
-        <span id="label-number">12,345</span>
+      <div class="label bottom">
+        <span id="label-year"></span>
+        <span id="label-unit"></span>
+        <span id="label-number"></span>
       </div>
 
       <div class="timeseries">
       </div>
 
+      <div class="loading">
+        <div class="spinner">
+        </div>
+        <div class="error hidden_elem">
+        </div>
+      </div>
     </div>
     <div class="sideicons">
     <div class="section">
       <div class="icon icon-list-view" data-toggle="tooltip" data-placement="left" title="List View"></div>
     </div>
     <div class="section">
-      <div class="icon icon-planted" data-toggle="tooltip" data-placement="left" title="Planted"></div>
-      <div class="icon icon-harvested" data-toggle="tooltip" data-placement="left" title="Harvested"></div>
-      <div class="icon icon-yield active" data-toggle="tooltip" data-placement="left" title="Yield"></div>
-      <div class="icon icon-production" data-toggle="tooltip" data-placement="left" title="Production"></div>
+      <div class="icon icon-planted stat active" id="planted" data-toggle="tooltip" data-placement="left" title="Planted"></div>
+      <div class="icon icon-harvested stat" id="harvested" data-toggle="tooltip" data-placement="left" title="Harvested"></div>
+      <div class="icon icon-yield stat" id="yield" data-toggle="tooltip" data-placement="left" title="Yield"></div>
+      <div class="icon icon-production stat" id="production" data-toggle="tooltip" data-placement="left" title="Production"></div>
     </div>
     <div class="section">
       <div class="icon icon-legend"></div>
