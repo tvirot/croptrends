@@ -98,7 +98,7 @@ h4 {
   vertical-align: top;
 /*  width: 22%;
   width: calc(25% - 24px);*/
-  width: 155px;
+  width: 160px;
   float: left;
   /*border-bottom: 1px solid #ccc;*/
   background-color: rgba(255, 255, 255, 0.5);
@@ -207,7 +207,7 @@ h4 {
   /*width: 74%;*/
   /*width: calc(100% - 175px);*/
   position: relative;
-  width: 715px;
+  width: 710px;
   float: left;
 }
 
