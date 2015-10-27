@@ -726,6 +726,10 @@ h6 {
   letter-spacing: 1px;
 }
 
+.btn-default:active:hover,
+.btn-default:active:focus,
+.btn-default:active,
+.btn-default:focus,
 .btn-default:hover {
   color: #fff;
   background-color: rgba(0, 0, 0, 0.5);
