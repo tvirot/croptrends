@@ -781,7 +781,7 @@ h6 {
 }
 
 .spinner:before {
-  content: 'Loading…';
+  content: 'Loading...';
   position: absolute;
   top: 45%;
   left: 50%;
