@@ -313,10 +313,6 @@ p.clear {
   height: 2em;
 }
 
-.listview tr *:first-child {
-  width: 45px;
-}
-
 .listview tr *:nth-child(2) {
   text-align: left;
   width: 150px;

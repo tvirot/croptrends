@@ -26,6 +26,7 @@
   var tooltipOffset = [0][0];
   var loading;
   var listview, listviewTable;
+  var legendIcon;
   var labels = {};
 
 
@@ -110,6 +111,8 @@
 
     listview = d3.select(".listview");
     listviewTable = listview.select(".table-div table");
+
+    legendIcon = d3.select(".icon-legend");
 
     labels.commodity = d3.select("#label-commodity");
     labels.stat = d3.select("#label-stat");
@@ -671,11 +674,13 @@
 
     updateList();
 
+    legendIcon.classed("hidden_elem", true);
     listview.classed("hidden_elem", false);
   }
 
   function hideList() {
     uiState.listview = false;
+    legendIcon.classed("hidden_elem", false);
     listview.classed("hidden_elem", true);
   }
 
@@ -698,7 +703,7 @@
         }
       });
     } else if (uiState.mode === "STATE") {
-      if (!summary.state[stateID].data.hasOwnProperty(uiState.year)){
+      if (!summary.state[uiState.state].data.hasOwnProperty(uiState.year)){
         isNA = true;
       }
       Object.keys(summary.county).forEach(function(countyID) {
@@ -730,9 +735,15 @@
         var name = '<td>' + d.name + "</td>";
         var value = '<td>' + thousandComma(d.value) + "</td>";
         var share;
-        if (dataSelection.stat === 'yield') {
+        if (isNA) {
           share = '<td></td>'
-        } else if (isNA) {
+        } else if (dataSelection.stat === 'yield') {
+          // share = '<td>' +
+          //   oneDecimal(Math.abs(d.pct - 100)) + '% ' +
+          //   ((d.pct > 100.0) ? 'above ' : 'below ') +
+          //   ((uiState.mode === "NATIONAL") ? 'national' : summary.state[uiState.state].name) +
+          //   ' average.' +
+          //   '</td>';
           share = '<td></td>';
         } else {
           share = '<td class="bar-column">' +
