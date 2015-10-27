@@ -59,7 +59,8 @@
     zoom: d3.select(null),
     mode: "NATIONAL",
     state: undefined,
-    county: undefined
+    county: undefined,
+    listview: false
   };
 
   var summary;
@@ -346,6 +347,14 @@
 
     toggleZoom();
     changeState(undefined);
+
+    if (uiState.listview) {
+      d3.select(".icon.mode")
+        .classed("icon-list-view", true)
+        .classed("icon-map-view", false)
+        .attr("data-original-title", "List View");
+      hideList();
+    }
   }
 
   function zoomed(state) {
@@ -423,6 +432,10 @@
 
     updateMap();
     updateTimeseries(); // TO-DO: Consider removing this.
+
+    if (uiState.listview) {
+      updateList();
+    }
 
     labels.year.html(year);
     updateNumberLabel();
@@ -521,6 +534,10 @@
         resetZoom();
       } else {
         changeState(uiState.state);
+      }
+
+      if (uiState.listview) {
+        showList();
       }
 
       if (uiState.year &&
@@ -643,7 +660,8 @@
   }
 
   function showList() {
-    listview.classed("hidden_elem", false);
+    uiState.listview = true;
+
     listview.select("#table-stat")
       .html(statStrs[dataSelection.stat]);
     listview.select("#table-region")
@@ -652,26 +670,37 @@
       .html(summary.metadata.unit.toLowerCase());
 
     updateList();
+
+    listview.classed("hidden_elem", false);
   }
 
   function hideList() {
+    uiState.listview = false;
     listview.classed("hidden_elem", true);
   }
 
   function updateList() {
     var dat = [];
+    var isNA = false;
     if (uiState.mode === "NATIONAL") {
+      if (!summary.national.data.hasOwnProperty(uiState.year)){
+        isNA = true;
+      }
       Object.keys(summary.state).forEach(function(stateID) {
         if (summary.state[stateID].data.hasOwnProperty(uiState.year)) {
           dat.push({
             name: summary.state[stateID].name,
             value: summary.state[stateID].data[uiState.year],
-            pct: summary.state[stateID].data[uiState.year] /
+            pct: (isNA) ? 0 :
+              summary.state[stateID].data[uiState.year] /
               summary.national.data[uiState.year] * 100.0
           });
         }
       });
     } else if (uiState.mode === "STATE") {
+      if (!summary.state[stateID].data.hasOwnProperty(uiState.year)){
+        isNA = true;
+      }
       Object.keys(summary.county).forEach(function(countyID) {
         var stateID = countyID.slice(0,-3);
         if (stateID == uiState.state &&
@@ -679,7 +708,8 @@
           dat.push({
             name: summary.county[countyID].name,
             value: summary.county[countyID].data[uiState.year],
-            pct: summary.county[countyID].data[uiState.year] /
+            pct: (isNA) ? 0 :
+              summary.county[countyID].data[uiState.year] /
               summary.state[stateID].data[uiState.year] * 100.0
           });
         }
@@ -699,11 +729,18 @@
         var rank = '<td>' + (i + 1) + "</td>";
         var name = '<td>' + d.name + "</td>";
         var value = '<td>' + thousandComma(d.value) + "</td>";
-        var share = '<td class="bar-column">' +
-          '<div class="percent">' + oneDecimal(d.pct) + '%</div>' +
-          '<div class="percent-bar">' +
-          '<div class="percent-fill" style="width: ' + oneDecimal(d.pct) + '%"></div>' +
-          '</div></td>';
+        var share;
+        if (dataSelection.stat === 'yield') {
+          share = '<td></td>'
+        } else if (isNA) {
+          share = '<td></td>';
+        } else {
+          share = '<td class="bar-column">' +
+            '<div class="percent">' + oneDecimal(d.pct) + '%</div>' +
+            '<div class="percent-bar">' +
+            '<div class="percent-fill" style="width: ' + oneDecimal(d.pct) + '%"></div>' +
+            '</div></td>';
+        }
         return rank + name + value + share;
       });
   }
