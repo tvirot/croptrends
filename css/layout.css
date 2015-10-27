@@ -641,8 +641,12 @@ p.clear {
   text-transform: uppercase;
 }
 
-.content section {
+.content section.feature {
   margin: 20px auto;
+}
+
+.content section.about {
+  margin: 40px auto 70px auto;
 }
 
 h2 {
@@ -668,7 +672,7 @@ h2 {
   display: block;
   height: 1px;
   background-color: #dbdbdb;
-  margin: 0;
+  margin: 240px 0 0 0;
   padding: 0;
 }
 
@@ -679,9 +683,9 @@ h2 {
 }
 
 h5 {
-  font-size: 32px;
-  margin: 0 0 20px 0;
-  font-weight: 200;
+  font-size: 18px;
+  margin: 5px 0 0 0;
+  font-weight: 400;
 }
 
 img {
@@ -694,7 +698,7 @@ img.device {
 }
 
 img.feature {
-  margin: 40px 0;
+  margin: 40px 0 0 0;
 }
 
 h6 {
@@ -703,9 +707,10 @@ h6 {
   margin: 30px 0;
 }
 
-.col p {
-  font-size: 20px;
-  font-weight: 100;
+.col-50 p {
+  font-size: 14px;
+  font-weight: 300;
+  margin: 5px 0;
 }
 
 .btn {
@@ -833,9 +838,82 @@ body:after{
   display:none;
   content: url("/icons/list-view-hover.svg") url("/icons/list-view-active.svg")
     url("/icons/map-view-hover.svg") url("/icons/map-view-active.svg")
+    url("/icons/planted-hover.svg") url("/icons/planted-active.svg")
     url("/icons/harvested-hover.svg") url("/icons/harvested-active.svg")
-    url("/icons/planted-hover.svg") url("/icons/planted-active.svg")
     url("/icons/yield-hover.svg") url("/icons/yield-active.svg")
-    url("/icons/planted-hover.svg") url("/icons/planted-active.svg")
-    url("/icons/production-hover.svg") url("/icons/production-active.svg");
+    url("/icons/production-hover.svg") url("/icons/production-active.svg")
+    url("/icons/legend-hover.svg");
+}
+
+.modal-body {
+  padding: 0;
+}
+
+.modal-content {
+  border-radius: 0;
+  height: 402px;
+}
+
+.modal-dialog {
+  width: 776px;
+  margin: 50px auto;
+}
+
+.col-50 {
+  width: 480px;
+  float: left;
+  padding: 0 20px;
+  margin: 15px 0;
+}
+
+.icon-40 {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.icon-feature1 {
+  background-image: url("/icons/feature1.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-feature2 {
+  background-image: url("/icons/feature2.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-feature3 {
+  background-image: url("/icons/feature3.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-feature4 {
+  background-image: url("/icons/feature4.svg");
+  background-repeat: no-repeat;
+}
+
+.col-50 .feature {
+  display: inline-block;
+  width: 376px;
+}
+
+.col-50-about .key {
+  display: inline-block;
+  width: 134px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.col-50-about .value {
+  display: inline-block;
+  width: 300px;
+}
+
+.col-50-about {
+  width: 480px;
+  float: left;
+  padding: 0 20px;
 }
