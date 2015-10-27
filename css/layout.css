@@ -12,7 +12,7 @@ body {
 body.about {
   padding: 0 20px;
   min-width: 1000px;
-  /*background-color: #efefef;*/
+  background-color: #fff;
 }
 
 /* For debugging layout */
@@ -163,7 +163,7 @@ h4 {
   font-size: 12px;
   font-weight: 300;
   color: #666;
-  padding: 4px 0;
+  padding: 10px 0;
   height: auto;
   overflow: scroll;
   text-align: left;
@@ -180,7 +180,7 @@ h4 {
 }
 
 .collaspible-menu .commodity li {
-  padding: 0.5px 20px;
+  padding: 1px 20px;
   cursor: pointer;
   line-height: 20px;
   transition-duration: 0.05s;
@@ -663,8 +663,8 @@ h2 {
 }
 
 .col {
-  width: 430px;
-  margin-right: 50px;
+  width: 460px;
+  margin-right: 20px;
   float: left;
 }
 
@@ -672,7 +672,7 @@ h2 {
   display: block;
   height: 1px;
   background-color: #dbdbdb;
-  margin: 40px 0;
+  margin: 0;
   padding: 0;
 }
 
@@ -685,13 +685,20 @@ h2 {
 h5 {
   font-size: 32px;
   margin: 0 0 20px 0;
-  font-weight: 400;
+  font-weight: 200;
 }
 
 img {
   width: 100%;
   height: auto;
-  margin-bottom: 40px;
+}
+
+img.device {
+  margin: 80px 0 60px 0;
+}
+
+img.feature {
+  margin: 40px 0;
 }
 
 h6 {
