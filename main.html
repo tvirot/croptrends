@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="author" content="Ta Virot Chiraphadhanakul and Chaiyawut Lertvichaivoravit"/>
+  <meta name="description" content="croptrends - USDA Innovation Challenge"/>
+  <meta name="keywords" content="usda, agriculture, devpost, visualization">
+
+  <title>croptrends - USDA Innovation Challenge</title>
+
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' type='text/css'>
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="css/layout.css" type="text/css">
+  <link rel="stylesheet" href="css/viz.css" type="text/css">
+  <link rel="icon" href="icons/favicon.png" type="image/png">
+</head>
+
+<body>
+  <div class="header">
+    <div class="title">
+      <h1><span class="green">crop</span><span class="blue">trends</span></h1>
+      <h4>Visualizing agricultural statistics of major crops in the United States</h4>
+    </div>
+    <a href="index.html"><button type="button" class="btn btn-about">About</button></a>
+<!--     <div class="info">
+      <span class="icon-info"></span>
+      <span class="link-info">About</span>
+
+    </div> -->
+    <p class="clear"></p>
+  </div>
+
+  <div class="content">
+
+    <div class="sidebar">
+
+      <div class="collaspible-menu expanded" id="crops">
+<!--         <div class="group">
+          <div class="title">COMMODITY</div>
+        </div> -->
+        <div class="commodity">
+          <ul>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="main">
+      <div class="viz">
+        <div class="map">
+        </div>
+        <div class="tooltip">
+          <div class="container">
+            <div id="tooltip-state"></div>
+            <div id="tooltip-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listview hidden_elem">
+        <div class="header">
+          <span id="table-stat">Area harvested</span> by
+          <span id="table-region">state</span>
+          (<span id="table-unit">bu / acres</span>)
+        </div>
+        <div class="table-div">
+          <table>
+          </table>
+        </div>
+      </div>
+
+      <div class="label top">
+        <span id="label-region"></span>
+        <span id="label-stat"></span>
+      </div>
+      <p class="clear"></p>
+      <div class="label bottom">
+        <span id="label-year"></span>
+        <span id="label-unit"></span>
+        <span id="label-number"></span>
+      </div>
+
+      <div class="timeseries">
+      </div>
+
+      <div class="loading">
+        <div class="spinner">
+        </div>
+        <div class="error hidden_elem">
+        </div>
+      </div>
+    </div>
+    <div class="sideicons">
+    <div class="section">
+      <div class="icon mode icon-list-view" data-toggle="tooltip" data-placement="left" title="List View"></div>
+    </div>
+    <div class="section">
+      <div class="icon icon-planted stat active" id="planted" data-toggle="tooltip" data-placement="left" title="Planted"></div>
+      <div class="icon icon-harvested stat" id="harvested" data-toggle="tooltip" data-placement="left" title="Harvested"></div>
+      <div class="icon icon-yield stat" id="yield" data-toggle="tooltip" data-placement="left" title="Yield"></div>
+      <div class="icon icon-production stat" id="production" data-toggle="tooltip" data-placement="left" title="Production"></div>
+    </div>
+    <div class="section">
+      <div class="icon icon-legend"></div>
+    </div>
+    </div>
+    </div>
+  </div>
+
+</body>
+<script src="js/jquery-1.11.3.min.js"></script>
+<!-- <script src="js/d3.min.js"></script>
+<script src="js/topojson.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/app.js"></script>
+
+
+</html>
