@@ -173,9 +173,11 @@
         })
         .on("mouseover", function(d) {
           if (!summary.county.hasOwnProperty(d.id)) {
-            d3.select(this).style("cursor", "not-allowed")
+            d3.select(this).style("cursor", "not-allowed");
             return;
-          }
+          } 
+
+          d3.select(this).style("cursor", "pointer");
 
           highlight.append("path")
             .datum(d)
@@ -204,9 +206,11 @@
         })
         .on("mouseover", function(d) {
           if (!summary.state.hasOwnProperty(d.id)) {
-            d3.select(this).style("cursor", "not-allowed")
+            d3.select(this).style("cursor", "not-allowed");
             return;
-          }
+          } 
+          
+          d3.select(this).style("cursor", "pointer");
 
           highlight.append("path")
             .datum(d)
