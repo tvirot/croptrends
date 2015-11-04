@@ -175,7 +175,7 @@
           if (!summary.county.hasOwnProperty(d.id)) {
             d3.select(this).style("cursor", "not-allowed");
             return;
-          } 
+          }
 
           d3.select(this).style("cursor", "pointer");
 
@@ -208,8 +208,8 @@
           if (!summary.state.hasOwnProperty(d.id)) {
             d3.select(this).style("cursor", "not-allowed");
             return;
-          } 
-          
+          }
+
           d3.select(this).style("cursor", "pointer");
 
           highlight.append("path")
@@ -352,7 +352,7 @@
         .style("stroke-width", "0.5px");
     }, 500);
 
-    toggleZoom();
+    uiState.mode = 'NATIONAL';
     changeState(undefined);
 
     if (uiState.listview) {
@@ -369,7 +369,10 @@
 
     // TO-DO: If no data, return.
 
-    if (uiState.zoom.node() === this) return resetZoom();
+    if (uiState.zoom.node() === this) {
+      resetZoom();
+      return;
+    }
 
     var width_ = width - mapMargin.left - mapMargin.right,
         height_ = height - mapMargin.top - mapMargin.bottom;
@@ -404,7 +407,7 @@
       })
       .style("stroke-width", 1.0 / scale + "px");
 
-    toggleZoom();
+    uiState.mode = 'STATE';
   }
 
   function slided() {
@@ -457,14 +460,6 @@
       labels.region.html(summary.county[countyID].name);
     }
     updateNumberLabel()
-  }
-
-  function toggleZoom() {
-    if (uiState.mode == 'NATIONAL') {
-      uiState.mode = 'STATE';
-    } else if (uiState.mode == 'STATE') {
-      uiState.mode = 'NATIONAL';
-    }
   }
 
   function updateNumberLabel() {
